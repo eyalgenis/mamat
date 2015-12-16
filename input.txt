@@ -1,0 +1,88 @@
+Print_Line
+Start
+
+Print_Line
+Adding Courses
+Add_Course 234117 IntroCS 4 000000
+Add_Course 044101 MAMAT 3 234117
+Add_Course 104012 Calculus1 5 000000
+Add_Course 104013 Calculus2 5 104012
+Add_Course 114051 Physics1 3 000000
+Add_Course 114052 Physics2 5 114051
+Add_Course 114053 Physics3 3 114052
+Add_Course 114032 PhyLab1 1 114051
+Add_Course 114033 PhyLab2 1 114051
+Add_Course 104220 PDE 3 104135
+Add_Course 104135 ODE 2 104012
+Add_Course 046209 OS 4 044101
+Add_Course 104220 PDE 3 104135
+Add_Course 046271 OOP 3 044101
+Add_Course 044125 MALAM 4 114053
+Add_Course 044130 SNS 4 104135
+
+Amount_of_Courses
+
+Print_Line
+Print PDE Prerequisites - Error
+Print_Prerequisites 104225
+
+Print_Line
+Print PDE Prerequisites 
+Print_Prerequisites 104220
+
+Print_Line
+Take Courses 
+Take_Course 234117
+Take_Course 044101
+Take_Course 114053
+Take_Course 114051
+Take_Course 114052
+
+Print_Line
+Print MALAM Prerequisites 
+Print_Prerequisites 044125
+
+Print_Line
+Remove Physics3 from the Database
+Remove_Course 114053
+
+Print_Line
+Print MALAM Prerequisites 
+Print_Prerequisites 044125
+
+Print_Line
+Adding Courses
+Add_Course 104221 ComplexAnalysis 4 104018
+Add_Course 104221 ComplexAnalysis 4 104013
+Add_Course 104034 IntroProb 3 104013
+Add_Course 044202 RandomSignals 3 104034
+Add_Course 044145 DigSys 3 000000
+Add_Course 044262 LogicDesign 3 044145
+Add_Course 046267 CompArch 3 044262
+ 
+Amount_of_Courses
+
+Print_Line
+Print RandomSignals Prerequisites 
+Print_Prerequisites 044202
+
+Print_Line
+Take Courses 
+Take_Course 104034
+Take_Course 104012
+Take_Course 104013
+Take_Course 104034
+Take_Course 044202
+
+Print_Line
+Print all Taken Courses
+Print_Executed
+
+Reset_Courses
+
+Print_Line
+Print all Taken Courses
+Print_Executed
+
+Print_Line
+End
