@@ -2,6 +2,6 @@
 second row
 eyal
 
-func
+func(abc)
 
 new
