@@ -15,7 +15,10 @@ typedef struct Course_ {
   
 } Course, *PCourse;
 
-
+void Print_Course(Course*);
+Course* Clone_Course(Course*);
+void Delete_Course(Course*);
+CompareResult Compare_courses(Course*, Course*);
 
 
 int main()
@@ -91,10 +94,22 @@ int main()
   return 0;
 }
 
+void Print_Course(Course* course) {
+	printf("Course - <%c>\n", &course->ID);
+	printf("====================\n");
+	printf("Name - <%c>\n", &course->name);
+	printf("Name - <%d>\n", &course->points);
+
+}
 
 
+Course* Clone_Course(Course* course1) {
 
+	Course* course2 malloc(sizeof)
 
+		return course2;
+
+}
 
 
 
