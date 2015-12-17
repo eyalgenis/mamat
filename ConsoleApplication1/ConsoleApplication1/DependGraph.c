@@ -7,43 +7,22 @@
 typedef struct _DEPEND_GRAPH
 {
 	PNODE head;
-
-	/* Function Pointers */
-//	GET_KEY GetKeyFunc;
-	DEL_ELEMENT DelElementFunc;
-	COMPARE_KEYS CompareKeysFunc;
-	PRINT_ELEMENT PrintElementFunc;
-	CLONE CloneFunc;
+	DELETE_ELEMENT DeleteF;
+	COMPARE_ELEMENT CompareF;
+	PRINT_ELEMENT PrintF;
+	CLONE_ELEMENT CloneF;
 
 } DEPEND_GRAPH;
-
 
 /*
 * Private helper functions
 */
 
-//static Bool FindNode(PDEPEND_GRAPH pDG, PNODE pNode) /// ????
-//{
-//	int i;
-//	PKEY pElemKey;
-//		for (i = 0; i < MAX_ELEMENTS; i++)
-//		{
-//			pElemKey = pDG->GetKeyFunc(pDG->ArrElements[i]);
-//			if (pDG->CompareKeysFunc(pKey, pElemKey))
-//				return i;
-//		}
-//	return -1;
-//}
-
 /*
 * Interface implementation
 */
 
-	PDEPEND_GRAPH CreateGRAPH(
-	DEL_ELEMENT DelElementFunc,
-	COMPARE_KEYS CompareKeysFunc,
-	CLONE CloneFunc,
-	PRINT_ELEMENT PrintElementFunc)
+PDEPEND_GRAPH CreateGRAPH(CLONE_ELEMENT CloneF, DELETE_ELEMENT DeleteF, COMPARE_ELEMENT CompareF, PRINT_ELEMENT PrintF)
 {
 	PDEPEND_GRAPH pDG;
 
@@ -56,10 +35,10 @@ typedef struct _DEPEND_GRAPH
 	}
 
 	pDG->head = NULL;
-	pDG->CompareKeysFunc = CompareKeysFunc;
-	pDG->DelElementFunc = DelElementFunc;
-	pDG->CloneFunc = CloneFunc;
-	pDG->PrintElementFunc = PrintElementFunc;
+	pDG->CompareF = CompareF;
+	pDG->DeleteF = DeleteF;
+	pDG->CloneF = CloneF;
+	pDG->PrintF = PrintF;
 
 	return pDG;
 }
@@ -69,7 +48,7 @@ void DeleteGRAPH(PDEPEND_GRAPH pDG)
 	if (pDG == NULL)
 		return;
 
-	PNODE p = pDG->head;
+	PNODE pNode = pDG->head;
 
 	if (p == NULL) {
 		free(pDG);
@@ -79,19 +58,19 @@ void DeleteGRAPH(PDEPEND_GRAPH pDG)
 	PNODE pNext = p->nextNode;
 
 	while (pNext != NULL) {
-		pDG->DelElementFunc(p->pelem);
+		pDG->DeleteF(p->pelem);
 		free(p);
 		p = pNext;
 	}
 	
-	pDG->DelElementFunc(p->pelem);
+	pDG->DeleteF(pNode->pelem);
 	free(p);
 	free(pDG);
 }
 
-Result AddGRAPH(PDEPEND_GRAPH pDG, PNODE pNewNode, PNODE pParent)
+Result AddGRAPH(PDEPEND_GRAPH pDG, PNODE pNodeToAdd, PNODE pParent)
 {
-	PNODE pSearchNode, pSearchParent;
+	PNODE pSearchNode, pSearchParent, pNewNode;
 
 	if (pNewNode == NULL || pDG == NULL) // no GRAPH or no NODE to add
 		return FAILURE;
@@ -106,24 +85,39 @@ Result AddGRAPH(PDEPEND_GRAPH pDG, PNODE pNewNode, PNODE pParent)
 	if (pParent != NULL && pSearchParent == NULL) // parent isn't NULL + doesn't exist on graph
 		return FAILURE;
 
-	if (pDG->head == NULL) // LINK FIRST NODE
+	pNewNode = (PNODE)malloc(sizeof(PNODE)); // ADT copies the node
+	if (pNewNode == NULL)
 	{
+		fprintf(stdout, "DependGraph.c: Failed to allocate memory");
+		exit(-1);
+	}
+
+	pNewNode->pelem = pDG->CloneFunc(pNodeToAdd); // copy the element
+
+	newNode->parentNode = Node_Of_Parent_Element;
+	newNode->previousNode = graph->newestNode;
+	newNode->was_executed = false;
+	graph->newestNode = newNode;
+	graph->Num_Of_Nodes++;
+	return SUCCESS;
+
+	if (pDG->head == NULL) // LINK FIRST NODE + add to start of list
+	{
+		pNewNode->parentNode = NULL;
+
 		pDG->head = pNewNode;
 		pNewNode->nextNode = NULL;
-		pNewNode->parentNode = NULL;
+
 		return SUCCESS;
 	}
 
-									// it's not the first
-	pTmp = pDG->head;
-	while (p->nextNode != NULL) {
-		p = p->nextNode;
-	}
-	p->nextNode = pNode;
-	pNode->nextNode = NULL;
-	pNode->parentNode = pParent;
+	// it's not the first, link to parent + add to start of list
+	pNewNode->parentNode = pParent;
+
+	pNewNode->nextNode = pDG->head;
+	pDG->head = pNewNode;
+
 	return SUCCESS;
-	}
 }
 
 PNODE FindNode(PDEPEND_GRAPH pDG, PNODE pNode)

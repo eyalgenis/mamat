@@ -5,26 +5,24 @@
 
 /* Some necessary type definitions */
 typedef struct _DEPEND_GRAPH* PDEPEND_GRAPH;
-typedef void* PKEY; /* Notice we now use a pointer to a key */
-typedef void* PElement;typedef struct DependGraphNode_* PNODE;
-
+typedef struct DependGraphNode_* PNODE;
+typedef void* PElement;
 
 typedef struct DependGraphNode_ {
-	PElement pelem;
-	PNODE nextNode;
-	PNODE parentNode;
+	PElement pelem; // element of user
+	PNODE nextNode; // mekusheret
+	PNODE parentNode; // graphic
 	Bool was_executed;
 } NODE;
 
 /* Function types */
-typedef PKEY(*GET_KEY)(PElement);
-typedef void(*DEL_ELEMENT)(PElement);
-typedef Bool(*COMPARE_KEYS)(PKEY, PKEY);
+typedef void(*DELETE_ELEMENT)(PElement);
+typedef Bool(*COMPARE_ELEMENT)(PElement, PElement);
 typedef void(*PRINT_ELEMENT)(PElement);
-typedef void(*CLONE)(PElement);
+typedef void(*CLONE_ELEMENT)(PElement);
 
 /* Interface functions */
-PDEPEND_GRAPH CreateGRAPH(GET_KEY, DEL_ELEMENT, COMPARE_KEYS, PRINT_ELEMENT);
+PDEPEND_GRAPH CreateGRAPH(CLONE_ELEMENT, DELETE_ELEMENT, COMPARE_ELEMENT, PRINT_ELEMENT);
 
 Result AddGRAPH(PDEPEND_GRAPH, PElement, PNODE);
 
