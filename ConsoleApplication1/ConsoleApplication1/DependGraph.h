@@ -9,9 +9,9 @@ typedef struct DependGraphNode_* PNODE;
 typedef void* PElement;
 
 typedef struct DependGraphNode_ {
-	PElement pelem; // element of user
-	PNODE nextNode; // mekusheret
+	PElement pElem; // element of user
 	PNODE parentNode; // graphic
+	PNODE nextNode; // mekusheret
 	Bool was_executed;
 } NODE;
 
@@ -19,7 +19,7 @@ typedef struct DependGraphNode_ {
 typedef void(*DELETE_ELEMENT)(PElement);
 typedef Bool(*COMPARE_ELEMENT)(PElement, PElement);
 typedef void(*PRINT_ELEMENT)(PElement);
-typedef void(*CLONE_ELEMENT)(PElement);
+typedef PElement(*CLONE_ELEMENT)(PElement);
 
 /* Interface functions */
 PDEPEND_GRAPH CreateGRAPH(CLONE_ELEMENT, DELETE_ELEMENT, COMPARE_ELEMENT, PRINT_ELEMENT);

@@ -26,7 +26,7 @@ PDEPEND_GRAPH CreateGRAPH(CLONE_ELEMENT CloneF, DELETE_ELEMENT DeleteF, COMPARE_
 {
 	PDEPEND_GRAPH pDG;
 
-	pDG = (PDEPEND_GRAPH)malloc(sizeof(PDEPEND_GRAPH));
+	pDG = (PDEPEND_GRAPH)malloc(sizeof(DEPEND_GRAPH));
 
 	if (pDG = NULL)
 	{
@@ -45,162 +45,202 @@ PDEPEND_GRAPH CreateGRAPH(CLONE_ELEMENT CloneF, DELETE_ELEMENT DeleteF, COMPARE_
 
 void DeleteGRAPH(PDEPEND_GRAPH pDG)
 {
+	PNODE pNode, pNext;
+	
 	if (pDG == NULL)
 		return;
 
-	PNODE pNode = pDG->head;
+	pNode = pDG->head;
 
-	if (p == NULL) {
+	if (pNode == NULL) {
 		free(pDG);
 		return;
 	}
 
-	PNODE pNext = p->nextNode;
+	pNext = pNode->nextNode;
 
 	while (pNext != NULL) {
-		pDG->DeleteF(p->pelem);
-		free(p);
-		p = pNext;
+		pDG->DeleteF(pNode->pElem);
+		free(pNode);
+		pNode = pNext;
 	}
 	
-	pDG->DeleteF(pNode->pelem);
-	free(p);
+	pDG->DeleteF(pNode->pElem);
+	free(pNode);
 	free(pDG);
 }
 
-Result AddGRAPH(PDEPEND_GRAPH pDG, PNODE pNodeToAdd, PNODE pParent)
+Result AddElement(PDEPEND_GRAPH pDG, PElement pNewElement, PElement pParentElement)
 {
-	PNODE pSearchNode, pSearchParent, pNewNode;
+	PNODE pNewNode, pParentNode;
 
-	if (pNewNode == NULL || pDG == NULL) // no GRAPH or no NODE to add
+	if (pDG == NULL || pNewElement == NULL) // no GRAPH or no ELEMENT to add (parameters check)
+		return FAILURE;
+
+	pNewNode = FindNode(pDG, pNewElement);
+
+	if (pNewNode != NULL) // node already exists
 		return FAILURE;
 	
-	pSearchNode = FindNode(pDG, pNewNode);
+	pParentNode = FindNode(pDG, pParentElement); // search Parent (lior saved it + flag.. for what ??)
 
-	if (pSearchNode != NULL) // node already exist
-		return FAILURE;
-	
-	pSearchParent = FindNode(pDG, pParent); // search Parent  (lior saved it + flag.. for what ??)
-
-	if (pParent != NULL && pSearchParent == NULL) // parent isn't NULL + doesn't exist on graph
+	if (pParentElement != NULL && pParentNode == NULL) // parent element isn't NULL + its node doesn't exist on graph
 		return FAILURE;
 
-	pNewNode = (PNODE)malloc(sizeof(PNODE)); // ADT copies the node
+	pNewNode = (PNODE)malloc(sizeof(NODE)); // ADT creates a node and initialize + copies the element
 	if (pNewNode == NULL)
 	{
 		fprintf(stdout, "DependGraph.c: Failed to allocate memory");
 		exit(-1);
 	}
 
-	pNewNode->pelem = pDG->CloneFunc(pNodeToAdd); // copy the element
-
-	newNode->parentNode = Node_Of_Parent_Element;
-	newNode->previousNode = graph->newestNode;
-	newNode->was_executed = false;
-	graph->newestNode = newNode;
-	graph->Num_Of_Nodes++;
-	return SUCCESS;
-
-	if (pDG->head == NULL) // LINK FIRST NODE + add to start of list
-	{
-		pNewNode->parentNode = NULL;
-
-		pDG->head = pNewNode;
-		pNewNode->nextNode = NULL;
-
-		return SUCCESS;
-	}
-
-	// it's not the first, link to parent + add to start of list
-	pNewNode->parentNode = pParent;
-
-	pNewNode->nextNode = pDG->head;
+	pNewNode->pElem = pDG->CloneF(pNewElement); // copy the element
+	pNewNode->parentNode = pParentNode; // link to found (or NULL) 
+	pNewNode->nextNode = pDG->head; // add to start of list
 	pDG->head = pNewNode;
+	pNewNode->was_executed = FALSE;
 
 	return SUCCESS;
 }
 
-PNODE FindNode(PDEPEND_GRAPH pDG, PNODE pNode)
+PNODE FindNode(PDEPEND_GRAPH pDG, PElement pElem)
 {
 	PNODE pSearch = pDG->head;
 
 	for (pSearch = pDG->head; pSearch != NULL; pSearch = pSearch->nextNode) // Search if NODE (key, elem) already exists
 	{
-		if (pDG->CompareKeysFunc(pSearch->pelem, pNode->pelem) == EQUAL)
-			return pNode;
+		if (pDG->CompareF(pSearch->pElem, pElem) == EQUAL)
+			return pSearch;
 	}
 
 	return NULL;
 }
 
 
-Result ExecuteGRAPH(PDEPEND_GRAPH pDG, PNODE pNode) {
+Result ExecuteElement(PDEPEND_GRAPH pDG, PElement pElementExec)
+{
+	PNODE pExecNode;
 
-	if (pNode == NULL || pDG == NULL)
+	if (pDG == NULL || pElementExec == NULL) // parameters check
 		return FAILURE;
 
-	PNODE p = pNode; // temp get pnode pointer
+	pExecNode = FindNode(pDG, pElementExec); // find the node of input element
 
-	while (p->parentNode != NULL) {
-		if (p->was_executed == FALSE) {
-			printf("Error - Cannot execute:\n");
-			printf("%v\n", &(pNode->pelem)); // what type of element?
-			printf("The next Prerequisite is not satisfied\n");
-			printf("%v\n", &(p->pelem)); // what type of element?
+	if (pExecNode == NULL || pExecNode->was_executed == TRUE)
+		return FAILURE;
+
+	while (pExecNode->parentNode != NULL) // look up on graph
+	{
+		if (pExecNode->parentNode->was_executed == FALSE) // if up node isn't executed...
+		{
+			printf("Error - Cannot execute :\n");
+			pDG->PrintF(pElementExec);
+			printf("The next Prerequisite is not satisfied :\n");
+			pDG->PrintF(pExecNode->parentNode->pElem);
 
 			return FAILURE;
 		}
 			
-		p = p->parentNode;
+		pExecNode = pExecNode->parentNode;
 	}
 
-	pNode->was_executed = TRUE;
+	if (pExecNode->was_executed == FALSE) // last iteration
+	{
+		printf("Error - Cannot execute :\n");
+		pDG->PrintF(pElementExec);
+		printf("The next Prerequisite is not satisfied :\n");
+		pDG->PrintF(pExecNode->parentNode->pElem);
+
+		return FAILURE;
+	}
+
+	pExecNode->was_executed = TRUE;
+
 	return SUCCESS;
-
 }
 
-void PrintGRAPH(PDEPEND_GRAPH pDG)
+void PrintExecElements(PDEPEND_GRAPH pDG)
 {
-	PNODE p = pDG->head;
-
-	PStack pStack = StackCreate(pDG->CloneFunc, pDG->PrintElementFunc, pDG->DelElementFunc);
-
-	while (p->nextNode != NULL) {
-		// push
-		if (StackPush(pStack, p->pelem) == FAILURE)
-			return;
-		p = p->nextNode;
-	}
-
-	void StackPrint(pStack);
-
-}
-
-int NumGRAPH(PDEPEND_GRAPH pDG) {
+	PNODE pNode;
+	PStack pStack;
+	Result pushresult;
 
 	if (pDG == NULL)
-		return (-1);
+		return;
 
-	int i=1;
-	PNODE p = pDG->head;
+	pNode = pDG->head;
 
-	while (p->nextNode != NULL) {
-		p = p->nextNode;
-		i++;
+	pStack = StackCreate(pDG->CloneF, pDG->PrintF, pDG->DeleteF);
+
+	if (pStack == NULL)
+	{
+		fprintf(stdout, "DependGraph.c: Failed to allocate memory");
+		exit(-1);
 	}
 
-	return i;
+	while (pNode != NULL) // go over mekusheret
+	{
+		if (pNode->was_executed == TRUE)
+		{
+			pushresult = StackPush(pStack, pNode->pElem);
 
+			if (pushresult == FAILURE)
+			{
+				fprintf(stdout, "DependGraph.c: Failed to allocate memory");
+				exit(-1);
+			}
+		}
+		pNode = pNode->nextNode;
+	}
+
+	StackPrint(pStack);
+	StackDestroy(pStack);
+
+	return;
 }
 
-void PrintPARENTS(PDEPEND_GRAPH pDG, PNODE pNode) {
-	PNODE p = pDG->head;
+int CountElements(PDEPEND_GRAPH pDG)
+{
+	PNODE pNode;
+	int counter = 0;
 
-	PStack pStack = StackCreate(pDG->CloneFunc, pDG->PrintElementFunc, pDG->DelElementFunc);
+	if (pDG == NULL)
+		return -1;
 
-	while (p->parentNode != NULL) {
+	pNode = pDG->head;
+
+	while (pNode != NULL)
+	{
+		counter++;
+		pNode = pNode->nextNode;
+	}
+
+	return counter;
+}
+
+void PrintPrerequisities(PDEPEND_GRAPH pDG, PElement pElem)
+{
+	PNODE pNode;
+	PStack pStack;
+	Result pushresult;
+
+	if (pDG == NULL || pElem == NULL)
+		return;
+
+	pNode = pDG->head;
+
+	pStack = StackCreate(pDG->CloneF, pDG->PrintF, pDG->DeleteF);
+
+	if (pStack == NULL)
+	{
+		fprintf(stdout, "DependGraph.c: Failed to allocate memory");
+		exit(-1);
+	}
+
+	while (p->parentNode != NULL)
+	{
 		// push
-		if (StackPush(pStack, p->pelem) == FAILURE)
+		if (StackPush(pStack, p->pElem) == FAILURE)
 			return;
 		p = p->parentNode;
 	}
