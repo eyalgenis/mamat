@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdbool.h>
+#include "Stack.h"
 #include "Defines.h"
 #include "DependGraph.h"
-
 
 #define MAX_LINE_SIZE 255
 
@@ -22,20 +22,20 @@ Course* CreateCourse(char*, char*, int);
 
 int main()
 {
-  
   char szLine[MAX_LINE_SIZE];
   char* delimiters = " \t\n";
   char* pszCommand;
-
   char* pID = NULL;
   char* pName = NULL;
   char* pPrerequisiteID = NULL;
   char* pPoints;
   int points;
-   
+  int num;
+  Result result;
+  Course *newCourse, *parentCourse;
+  DEPEND_GRAPH* courseGraph = CreateGraph(CloneCourse, DeleteCourse, CompareCourses, PrintCourse);
 
-  while (fgets(szLine, MAX_LINE_SIZE, stdin))
-    {
+  while (fgets(szLine, MAX_LINE_SIZE, stdin)) {
       
       pszCommand = strtok(szLine, delimiters);
       
@@ -43,10 +43,7 @@ int main()
         {
 	  continue;
         }
-      if ( 0 == strcmp(pszCommand, "Add_Course") )
-        {
-			
-
+      if ( 0 == strcmp(pszCommand, "Add_Course") ) {
 			pID = strtok(NULL, delimiters);
 			pName = strtok(NULL, delimiters);
 			pPoints = strtok(NULL, delimiters);
@@ -55,57 +52,99 @@ int main()
 			if (pID == NULL || pName == NULL || pPoints == NULL || pPrerequisiteID == NULL) {
 				fprintf(stderr, "%s failed: not enough parameters\n", pszCommand);
 			}
-
 			
-			points = (atoi)(pPoints);
+			else {
+				newCourse = CreateCourse(pID, pName, points);
+				points = atoi(pPoints);
+				if (0 == strcmp("000000", pPrerequisiteID)) {
+					result = AddElement(courseGraph, newCourse, NULL);
+					if (result == FAILURE) {
+						fprintf(stderr, "%s failed: internal error\n", pszCommand);
+						fprintf(stderr, "%s %s %s %d %s\n", pszCommand, pID, pName, points, pPrerequisiteID);
+					}
+					DeleteCourse(newCourse);
+				}
+				else {
+					parentCourse = Create_Course(pPrerequisiteID, pName, points);
+					result = AddElement(courseGraph, newCourse, parentCourse);
+					if (result == FAILURE) {
+						fprintf(stderr, "%s failed: internal error\n", pszCommand);
+						fprintf(stderr, "%s %s %s %d %s\n", pszCommand, pID, pName, points, pPrerequisiteID);
+					}
+					DeleteCourse(parentCourse);
+					DeleteCourse(newCourse);
+				}
+			}
 
-			Course* CreateCourse(char* ID, char* name, int points)
+	}
+      else if ( 0 == strcmp(pszCommand, "Print_Prerequisites") ) {
+		  
+		  pID = strtok(NULL, delimiters);
 
+		  if (pID == NULL)
+			  fprintf(stderr, "%s failed: not enough parameters\n", pszCommand);
+		  else {
+			  newCourse = CreateCourse(pID, "stam", 1);
+			  PrintPrerequisities(courseGraph, newCourse);
+			  DeleteCourse(newCourse);
+		  }
+	  }
+      else if ( 0 == strcmp(pszCommand, "Print_Executed") ) {
+		PrintExecElements(courseGraph);
 	}
-      
-      else if ( 0 == strcmp(pszCommand, "Print_Prerequisites") )
-	{
-		
-	}
-      else if ( 0 == strcmp(pszCommand, "Print_Executed") )
-	{
-	  /*
-	    Add your code here
-	  */
-	}
-      else if  ( 0 == strcmp(pszCommand, "Take_Course") )
-	{
-	  /*
-	    Add your code here
-	  */
-	}
-      else if  ( 0 == strcmp(pszCommand, "Reset_Courses") )
-	{
-	  /*
-	    Add your code here
-	  */
-	}
-      else if  ( 0 == strcmp(pszCommand, "Amount_of_Courses") )
-	{
-	  /*
-	    Add your code here
-	  */
-	}
-      else if ( 0 == strcmp(pszCommand, "Remove_Course") )
-	{
-	  /*
-	    Add your code here
-	  */
-	}
-      else if ( 0 == strcmp(pszCommand, "Print_Line") )
-	{
-	  /*
-	    Add your code here
-	   */
-	}
-      
-    }
+	  else if (0 == strcmp(pszCommand, "Take_Course")) {
 
+		  pID = strtok(NULL, delimiters);
+
+		  if (pID == NULL)
+			  fprintf(stderr, "%s failed: not enough parameters\n", pszCommand);
+		  else {
+			  newCourse = CreateCourse(pID, "stam", 1);
+			  result = ExecuteElement(courseGraph, newCourse);
+			  if (result == FAILURE) {
+				  fprintf(stderr, "%s failed: internal error\n", pszCommand);
+				  fprintf(stderr, "%s %s\n", pszCommand, pID);
+			  }
+			  DeleteCourse(newCourse);
+		  }
+		  
+	  }
+      else if  ( 0 == strcmp(pszCommand, "Reset_Courses") ) {
+		result = ResetGRAPH(courseGraph);
+		if (result == FAILURE) {
+			fprintf(stderr, "%s failed: internal error\n", pszCommand);
+			fprintf(stderr, "%s\n", pszCommand);
+		}
+	  }
+      else if  ( 0 == strcmp(pszCommand, "Amount_of_Courses") ) {
+		num = CountElements(courseGraph);
+		if (num == -1) {
+			fprintf(stderr, "%s failed: internal error\n", pszCommand);
+			fprintf(stderr, "%s\n", pszCommand);
+		}
+		else printf("There are %d Courses in the database\n", num);
+	  }
+      else if ( 0 == strcmp(pszCommand, "Remove_Course") ) {
+		  
+		  pID = strtok(NULL, delimiters);
+
+		  if (pID == NULL)
+			  fprintf(stderr, "%s failed: not enough parameters\n", pszCommand);
+		  else {
+			  newCourse = CreateCourse(pID, "stam", 1);
+			  result= RemoveElement(courseGraph, newCourse);
+			  if (result == FAILURE) {
+				  fprintf(stderr, "%s failed: internal error\n", pszCommand);
+				  fprintf(stderr, "%s %s\n", pszCommand, pID);
+			  }
+			  DeleteCourse(newCourse);
+		  }
+	  }
+      else if ( 0 == strcmp(pszCommand, "Print_Line") ) {
+		  fgets(szLine, MAX_LINE_SIZE, stdin);
+		  printf("%s", szLine);
+	  }
+  }
   return 0;
 }
 
