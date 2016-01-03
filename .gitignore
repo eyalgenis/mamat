@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+# Others
+*.opensdf
+*.sdf
+*.sln
+*.vcxproj
+*.filters
+*.suo
+*.opendb
