@@ -1,8 +1,0 @@
-Add_Course failed: internal error
-Add_Course 104220 PDE 3 104135
-Take_Course failed: internal error
-Take_Course 114053
-Add_Course failed: internal error
-Add_Course 104221 ComplexAnalysis 4 104018
-Take_Course failed: internal error
-Take_Course 104034
