@@ -1,5 +1,5 @@
 #include "Course.H"
-
+////
 Course :: Course(char * courseNum, char * courseName, int hwAmount, double hwWeigh, int examGrade, int * hwGrade) :
 	courseNum_(courseNum), courseName_(courseName), hwAmount_(hwAmount), hwWeigh_(hwWeigh), examGrade_(examGrade), hwGrade_(hwGrade) {
 	count_++;
