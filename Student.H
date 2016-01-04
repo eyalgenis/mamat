@@ -13,7 +13,7 @@ public:
 	//* Function description: constructor of the object Student.
 	//* Return value: an object of the class Student.
 	//*************************************************************
-	Student(const int ID, const string Name, NumOfEECourses, NumOfCSCourses);
+	Student(const int ID, const char* Name, NumOfEECourses, NumOfCSCourses);
 
 	////*************************************************************
 	////* Function description: destructor of the object Student.

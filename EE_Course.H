@@ -6,11 +6,12 @@
 class EE_Course : public Course {
 public:
 	// Constructor: initializes ee_course
-	EE_Course();
-
+	EE_Course(int courseNum, char* courseName, int hwAmount, double hwWeigh);
+	
 	// Methods to access data individually
 	int getFactor() const; // Value of factor on course
 	int getCourseGrade() const;
+	~EE_Course();
 
 	// Methods to change data individually
 	int setFactor(int factorToSet); // Add factor to course

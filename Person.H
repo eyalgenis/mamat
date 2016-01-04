@@ -15,7 +15,7 @@ public: // methods
 	//*************************************************************
 	//* Function description: destructor of the object Student.
 	//*************************************************************
-	~Person() { delete Name }; // ???????????
+	~Person(); // ???????????
 
 	//* Function description: get ID of person
 	//* Return value: int ,the ID of person
@@ -29,8 +29,8 @@ public: // methods
 	//void print() const;
 
 protected: // PROPERTIES
-	int ID; // UNIQUE
-	char* Name; // STRING CLASS OR TYPE (CHAR*)?
+	int ID_; // UNIQUE
+	string Name_; // STRING CLASS OR TYPE (CHAR*)?
 };
 
 #endif
