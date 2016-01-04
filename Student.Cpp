@@ -1,47 +1,95 @@
 #include "Student.H"
-#include <stdbool.h>
 
 using std::cout;
 using std::endl;
 using std::boolalpha;
 
-//* Function description: constructor of the object Student.
-//* Return value: an object of the class Student
-Student::Student(const int ID, const string Name, NumOfEECourses, NumOfCSCourses) :
-Person(ID, Name), NumOfEECourses(NumOfEECourses), NumOfCSCourses(NumOfCSCourses)
+//CONSTRUCTOR
+Student::Student(const int ID, const char* PersonName) :
+Person(ID, PersonName), EECoursesTaken_(0), CSCoursesTaken_(0)
 {
-	EE_Course* pEEArray[MAX_COURSE_NUM] = { 0 };
-	CS_Course* pCSArray[MAX_COURSE_NUM] = { 0 };
+	EE_Course* pEEArray[MAX_COURSE_NUM] = { 0 }; // STATIC
+	CS_Course* pCSArray[MAX_COURSE_NUM] = { 0 }; // STATIC
 }
 
+//DESTRUCTOR
+Student::~Student() {} // THAT'S IT? NO MORE DELETES OF ARRAYS POINT-TO-ELEMENTS?? (lior vector...)
 
-int Student::getCouseCnt() const { return NumOfEECourses + NumOfCSCourses };
-
-bool Student::addEE_Course(EE_Course* EECourseToAdd)  // EE_COURSE* ???????????
+//SUM OF STUDENT'S LEARNED COURSES
+int Student::getCouseCnt() const
 {
-	int i=0;
-	while (i < MAX_COURSE_NUM)
+	return EECoursesTaken_ + CSCoursesTaken_;
+}
+
+bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
+{
+
+	if (EECourseToAdd == NULL)
+	{
+		return false; // ??????? exit(-1) ????????
+	}
+
+	if (EECoursesTaken_ == MAX_COURSE_NUM) // student has full courses
+	{
+		return false;
+	}
+
+	EE_Course* CopyToAdd;
+	CopyToAdd = new EE_Course(EECourseToAdd->getNum(), EECourseToAdd->getName(), EECourseToAdd->getHwNum(), EECourseToAdd->getHwWeigh());
+
+	//if (CopyToAdd == NULL) // allocation failed ?? is it necessary ??
+	//{
+	//	cerr << "meme" << endl; // ?????????? MEME ?????????
+	//	return false;
+	//}
+
+	CopyToAdd->setFactor(EECourseToAdd->getFactor());
+
+	int i = 0;
+	while (i < MAX_COURSE_NUM) // add course to available cell in array
 	{
 		if (pEEArray[i] != NULL)
 		{
-			pEEArray[i] = EECourseToAdd;
+			pEEArray[i] = CopyToAdd;
+			EECoursesTaken_++;
 			return true;
 		}
 		
 		i++;
 	}
 
-	return false;
+	return false;  // THE ARRAY IS FULL?
 }
 
 bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 {
+
+	if (CSCourseToAdd == NULL)
+	{
+		return false; // ??????? exit(-1) ????????
+	}
+
+	if (CSCoursesTaken_ == MAX_COURSE_NUM) // student has full courses
+	{
+		return false;
+	}
+
+	CS_Course* CopyToAdd;
+	CopyToAdd = new CS_Course(CSCourseToAdd->getNum(), CSCourseToAdd->getName(), CSCourseToAdd->getHwNum(), CSCourseToAdd->getHwWeigh(), CSCourseToAdd->isTakef(), CSCourseToAdd->getBook());
+
+	//if (CopyToAdd == NULL) // allocation failed ?????? is it necessary ??????
+	//{
+	//	cerr << "meme" << endl; // ?????????? MEME ?????????
+	//	return false;
+	//}
+	
 	int i = 0;
 	while (i < MAX_COURSE_NUM)
 	{
-		if (pEEArray[i] != NULL)
+		if (pCSArray[i] != NULL)
 		{
-			pEEArray[i] = CSCourseToAdd;
+			pCSArray[i] = CopyToAdd;
+			CSCoursesTaken_++;
 			return true;
 		}
 
@@ -50,42 +98,3 @@ bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 
 	return false;
 }
-
-
-//*************************************************************
-////* Function description: raises a flag that indicates a Student is sick.
-////* Return value: FAILURE/SUCCESS
-//*************************************************************
-//Result Student::set_sick()
-//{
-//	sick = true;
-//	return SUCCESS;
-//}
-
-//*************************************************************
-////* Function description: changes a Student's parents phone number.
-//*************************************************************
-//void Student::change_phone(const string new_phone)
-//{
-//	phone = new_phone;
-//}
-
-////***********************************************************
-////* Function description: gets out a Student's phone number
-//*************************************************************
-//string Student::get_phone() const { return phone; }
-
-
-//*************************************************************
-//* Function description: prints out a Student's information.
-//*************************************************************
-void Student::print() const
-{
-	Person::print();
-	cout << "Parant's Phone : " << phone << endl;
-	string is_sick =((sick==true) ? "true" : "false");
-	cout << "Is sick : " << is_sick << endl;
-}
-
-
-

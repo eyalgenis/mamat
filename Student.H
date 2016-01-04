@@ -4,25 +4,20 @@
 #include "Proj.H"
 //#include <string>
 #include <iostream>
+#include <stdbool.h>
 
 //using std::string;
 
 class Student : public Person {
 public:
 
-	//* Function description: constructor of the object Student.
-	//* Return value: an object of the class Student.
-	//*************************************************************
-	Student(const int ID, const char* Name, NumOfEECourses, NumOfCSCourses);
+	//CONSTRUCTOR
+	Student(const int ID, const char* PersonName);
 
-	////*************************************************************
-	////* Function description: destructor of the object Student.
-	////*************************************************************
-	//~Student() ---------IT'S ON StArray
-	//{
-	//	delete []pEE_Array;
-	//	delete []pCS_Array;
-	//};
+
+	//DESTRUCTOR
+	~Student();
+
 
 	int getCouseCnt() const;
 
@@ -51,9 +46,11 @@ public:
 	//*************************************************************
 	void print() const;
 
-private:
-	bool sick;
-	string phone;
+protected:
+	EE_Course* pEEArray;
+	CS_Course* pCSArray;
+	int EECoursesTaken_;
+	int CSCoursesTaken_;
 };
 
 #endif

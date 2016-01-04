@@ -8,13 +8,11 @@
 class Person {
 
 public: // methods
-	//* Function description: constructor of the object person, // STRING CLASS OR TYPE (CHAR*)?
-	//* Return value: object person
-	Person(const int ID, const string Name);
 
-	//*************************************************************
-	//* Function description: destructor of the object Student.
-	//*************************************************************
+	//CONSTRUCTOR
+	Person(const int ID, const char* PersonName);
+
+	//DESTRUCTOR
 	~Person(); // ???????????
 
 	//* Function description: get ID of person
@@ -30,7 +28,7 @@ public: // methods
 
 protected: // PROPERTIES
 	int ID_; // UNIQUE
-	string Name_; // STRING CLASS OR TYPE (CHAR*)?
+	char* PersonName_; // STRING CLASS OR TYPE (CHAR*)?
 };
 
 #endif
