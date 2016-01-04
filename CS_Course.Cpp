@@ -17,7 +17,10 @@ bool CS_Course::isTakef() const
 }
 
 char * CS_Course::getBook() const // do we need to make a copy?!?!?
-{	return bookName_;
+{
+	char* bookcpy = new char[strlen(bookName_) + 1];
+	strcpy(bookcpy, bookName_);
+	return bookcpy;
 }
 
 bool CS_Course::setTakef(bool takef)

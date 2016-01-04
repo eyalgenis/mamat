@@ -56,6 +56,8 @@ int main () {
 	if(cs_course.setTakef(false))
 		cout << "cs_course grade: " << cs_course.getCourseGrade() << endl;
 
+	cout << "cs_course hw takef? " << cs_course.isTakef() << endl;
+
 	if (cs_course.setBook("Algebra"))
 		cout << "cs_course book: " << cs_course.getBook() << endl;
 

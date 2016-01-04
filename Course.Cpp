@@ -14,7 +14,11 @@ int Course::getNum() const
 }
 
 char* Course::getName() const
-{	return courseName_;
+{	char* namecpy = new char[strlen(courseName_) + 1];
+	strcpy(namecpy, courseName_);
+	return namecpy;
+	
+	return courseName_;
 }
 
 int Course::getExamGrade() const
