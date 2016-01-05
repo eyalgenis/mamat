@@ -4,7 +4,7 @@ using namespace std;
 
 //CONSTRUCTOR
 Student::Student(const int ID, const char* PersonName) :
-Person(ID, PersonName), EECoursesTaken_(0), CSCoursesTaken_(0)
+	Person(ID, PersonName), EECoursesTaken_(0), CSCoursesTaken_(0)
 {
 	pEEArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
 	pCSArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
@@ -47,7 +47,7 @@ bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 			EECoursesTaken_++;
 			return true;
 		}
-		
+
 		i++;
 	}
 
@@ -70,7 +70,7 @@ bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 
 	CS_Course* CopyToAdd;
 	CopyToAdd = new CS_Course(CSCourseToAdd->getNum(), CSCourseToAdd->getName(), CSCourseToAdd->getHwNum(), CSCourseToAdd->getHwWeigh(), CSCourseToAdd->isTakef(), CSCourseToAdd->getBook());
-	
+
 	int i = 0;
 	while (i < MAX_COURSE_NUM)
 	{
@@ -181,7 +181,7 @@ void Student::print()
 
 	StudName = getName(); // Person??
 	cout << "Student Name: " << StudName << endl;
-	delete []StudName; // delete copy
+	delete[]StudName; // delete copy
 
 	cout << "Student ID: " << ID_ << endl;
 

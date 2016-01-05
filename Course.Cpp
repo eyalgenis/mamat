@@ -28,7 +28,7 @@ int Course::getHwGrade(int num) const
 	return *(grade+num);
 }
 
-int Course::getHwAmount() const
+int Course::getHwNum() const
 {	return hwAmount_;
 }
 
@@ -45,7 +45,9 @@ double Course::getHwAverage() const
 }
 
 int Course::getCourseGrade() const
-{	return round((1-hwWeigh_)*examGrade_+hwWeigh_*getHwAverage());
+{	
+	int finalGrade = (int)((1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage());
+	return finalGrade;
 }
 
 Course :: ~Course()

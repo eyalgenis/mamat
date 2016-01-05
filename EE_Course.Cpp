@@ -9,9 +9,9 @@ int EE_Course::getFactor() const
 {	return factor_;
 }
 
-int EE_Course:: getCourseGrade() const
+int EE_Course:: getCourseGrade()
 {	int finalGrade;
-	finalGrade = (int)((1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage()) + (int)factor_;
+	finalGrade = ((1 - hwWeigh_)*examGrade_ + hwWeigh_*getHwAverage()) + factor_;
 	if (finalGrade > 100)
 		return 100;
 	return finalGrade;

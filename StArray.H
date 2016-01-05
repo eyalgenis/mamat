@@ -18,7 +18,7 @@ public:
 	void resetStArray();
 	~StArray(); // Destructor
 
-	// Methods to change data individually
+				// Methods to change data individually
 	bool addStudent(int studentID, char studentName);
 	bool addEE_Course(int studentID, int courseNum, char courseName, int hwAmount, double hwWeigh);
 	bool addCS_Course(int studentID, int courseNum, char courseName, int hwAmount, double hwWeigh, bool isTakef, char bookName);

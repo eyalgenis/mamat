@@ -16,7 +16,7 @@ public:
 	char* getName() const; // Pointer to string of name of this course
 	int getExamGrade() const; // Exam's grade of this course
 	int getHwGrade(int num) const; // HW's grade of this course
-	int getHwAmount() const; // Number of HW to due on this course
+	int getHwNum() const; // Number of HW to due on this course
 	double getHwWeigh() const; // Weigh of HW on this course
 	double getHwAverage() const; // Average grade of HW on this course
 	int getCourseGrade() const; // Final grade on this course

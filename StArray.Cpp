@@ -4,7 +4,7 @@ using namespace std;
 
 //CONSTRUCTOR
 StArray::StArray(Student* pStudent) :
-studentCount_(0)
+	studentCount_(0)
 {
 	pStudentArray[MAX_STUDENT_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
 }
@@ -13,6 +13,43 @@ studentCount_(0)
 StArray::~StArray()
 {
 	resetStArray();
+}
+
+bool StArray::addStudent(int studentID, char* studentName)
+{
+	if (studentName == NULL || studentCount_ == MAX_STUDENT_NUM)
+		return false;
+	Student* studentToAdd = new Student(studentID, studentName);
+	pSudentArray[studentCount_] = studentToAdd;
+	studentCount_++;
+	return true;
+}
+
+bool StArray::addEE_Course(int studentID, int courseNum, char* courseName, int hwAmount, double hwWeigh)
+{
+
+	for (int i = 0; i < studentCount_; i++)
+		if (pSudentArray[i]->getID() == studentID) {
+			EE_Course* ee_courseToAdd = new EE_Course(courseNum, courseName, hwAmount, hwWeigh);
+			if (pSudentArray[i]->addEE_Course(ee_courseToAdd) == NULL)
+				return false;
+			delete ee_courseToAdd;
+			return true;
+		}
+	return false;
+}
+
+bool StArray::addCS_Course(int studentID, int courseNum, char* courseName, int hwAmount, double hwWeigh, bool isTakef, char bookName)
+{
+	for (int i = 0; i < studentCount_; i++)
+		if (pSudentArray[i]->getID() == studentID) {
+			CS_Course* cs_courseToAdd = new CS_Course(courseNum, courseName, hwAmount, hwWeigh, isTakef, bookName);
+			if (pSudentArray[i]->addCS_Course(cs_courseToAdd) == NULL)
+				return false;
+			delete cs_courseToAdd;
+			return 1;
+		}
+	return 0;
 }
 
 bool StArray::setHwGrade(int studentID, int courseNum, int hwNum, int newHwGrade)
@@ -122,7 +159,7 @@ void StArray::printAll()
 {
 	cout << "Prining all students" << endl;
 	cout << "####################" << endl;
-	
+
 	int i = 0;
 
 	while (i < studentCount_)

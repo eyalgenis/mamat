@@ -10,7 +10,7 @@ public:
 	
 	// Methods to access data individually
 	int getFactor() const; // Value of factor on course
-	int getCourseGrade() const;
+	int getCourseGrade();
 	~EE_Course();
 
 	// Methods to change data individually
