@@ -1,11 +1,5 @@
 #include "Person.H"
 
-//using std::string;
-using std::cout;
-using std::endl;
-
-
-
 // CONSTRUCTOR
 Person::Person(const int ID, const char* PersonName) :
 	ID_(ID)
@@ -21,16 +15,14 @@ Person::~Person()
 }
 
 
-//* Function description: get ID of person
-//* Return value: int ,the ID of person
+//get ID of person
 int Person::getID() const
 {
 	return ID_;
 }
 
 
-//* Function description: get Name of person
-//* Return value: STRING CLASS OR TYPE (CHAR*)? the Name of person
+//get Name of person
 char* Person::getName() const
 {
 	char* CopyName = new char[strlen(PersonName_) + 1];

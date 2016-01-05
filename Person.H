@@ -1,9 +1,7 @@
 #ifndef _PERSON_H_
 #define _PERSON_H_
-//#include <string>
 #include <iostream>
-
-//using std::string;
+#include "Proj.H"
 
 class Person {
 

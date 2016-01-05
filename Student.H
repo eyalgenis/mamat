@@ -1,14 +1,11 @@
 #ifndef _STUDENT_H_
 #define _STUDENT_H_
+#include <iostream>
+#include <stdbool.h>
 #include "Person.H"
 #include "Proj.H"
 #include "EE_Course.H"
 #include "CS_Course.H"
-//#include <string>
-#include <iostream>
-#include <stdbool.h>
-
-//using std::string;
 
 class Student : public Person {
 public:
