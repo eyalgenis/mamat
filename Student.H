@@ -2,6 +2,8 @@
 #define _STUDENT_H_
 #include "Person.H"
 #include "Proj.H"
+#include "EE_Course.H"
+#include "CS_Course.H"
 //#include <string>
 #include <iostream>
 #include <stdbool.h>
@@ -25,30 +27,19 @@ public:
 
 	bool addCS_Course(CS_Course* CSCourseToAdd);
 
-	//////***********************************************************
-	//////* Function description: gets out a Student's phone number
-	////*************************************************************
-	//string get_phone() const;
+	bool remCourse(const int CourseNumToRemove);
 
-	////*************************************************************
-	//////* Function description: changes a Student's parents phone number.
-	////*************************************************************
-	//void change_phone(const string phone);
+	EE_Course* getEE_Course(const int EECourseNum);
 
-	////*************************************************************
-	//////* Function description: raises a flag that indicates a Student is sick.
-	//////* Return value: FAILURE/SUCCESS
-	////*************************************************************
-	//Result set_sick();
+	CS_Course* getCS_Course(const int CSCourseNum);
 
-	//*************************************************************
-	//* Function description: prints out a Student's information.
-	//*************************************************************
+	int getAvg();
+
 	void print() const;
 
 protected:
-	EE_Course* pEEArray;
-	CS_Course* pCSArray;
+	EE_Course* pEEArray[MAX_COURSE_NUM; // STATIC
+	CS_Course* pCSArray[MAX_COURSE_NUM]; // STATIC
 	int EECoursesTaken_;
 	int CSCoursesTaken_;
 };
