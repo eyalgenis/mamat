@@ -22,7 +22,7 @@ int Person::getID() const
 }
 
 
-//get Name of person
+//get *COPY* Name of person
 char* Person::getName() const
 {
 	char* CopyName = new char[strlen(PersonName_) + 1];

@@ -1,25 +1,23 @@
 #include "Student.H"
 
-using std::cout;
-using std::endl;
-
 //CONSTRUCTOR
 Student::Student(const int ID, const char* PersonName) :
 Person(ID, PersonName), EECoursesTaken_(0), CSCoursesTaken_(0)
 {
-	pEEArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE)
-	pCSArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE)
+	pEEArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
+	pCSArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
 }
 
 //DESTRUCTOR
 Student::~Student() {} // THAT'S IT? NO MORE DELETES OF ARRAYS POINT-TO-ELEMENTS?? (lior vector...)
 
-//SUM OF STUDENT'S LEARNED COURSES
-int Student::getCouseCnt() const
+//get student's sum of courses from EE + CS  
+int Student::getCourseCnt() const
 {
 	return EECoursesTaken_ + CSCoursesTaken_;
 }
 
+//create *COPY* EE course + add to array of pointers to his EE courses
 bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 {
 
@@ -35,12 +33,6 @@ bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 
 	EE_Course* CopyToAdd;
 	CopyToAdd = new EE_Course(EECourseToAdd->getNum(), EECourseToAdd->getName(), EECourseToAdd->getHwNum(), EECourseToAdd->getHwWeigh());
-
-	//if (CopyToAdd == NULL) // allocation failed ?? is it necessary ??
-	//{
-	//	cerr << "meme" << endl; // ?????????? MEME ?????????
-	//	return false;
-	//}
 
 	CopyToAdd->setFactor(EECourseToAdd->getFactor());
 
@@ -60,6 +52,7 @@ bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 	return false;  // THE ARRAY IS FULL?
 }
 
+//create *COPY* CS course + add to array of pointers to his CS courses
 bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 {
 
@@ -75,12 +68,6 @@ bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 
 	CS_Course* CopyToAdd;
 	CopyToAdd = new CS_Course(CSCourseToAdd->getNum(), CSCourseToAdd->getName(), CSCourseToAdd->getHwNum(), CSCourseToAdd->getHwWeigh(), CSCourseToAdd->isTakef(), CSCourseToAdd->getBook());
-
-	//if (CopyToAdd == NULL) // allocation failed ?????? is it necessary ??????
-	//{
-	//	cerr << "meme" << endl; // ?????????? MEME ?????????
-	//	return false;
-	//}
 	
 	int i = 0;
 	while (i < MAX_COURSE_NUM)
@@ -98,6 +85,7 @@ bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 	return false;
 }
 
+//remove course (EE/CS) from memory + from student's array of pointers to courses
 bool Student::remCourse(const int CourseNumToRemove)
 {
 	int i = 0;
@@ -131,6 +119,7 @@ bool Student::remCourse(const int CourseNumToRemove)
 	return false;
 }
 
+//get pointer to student's EE course
 EE_Course* Student::getEE_Course(const int EECourseNum)
 {
 	int i = 0;
@@ -147,6 +136,7 @@ EE_Course* Student::getEE_Course(const int EECourseNum)
 	return NULL;
 }
 
+//get pointer to student's CS course
 CS_Course* Student::getCS_Course(const int CSCourseNum)
 {
 	int i = 0;
@@ -163,6 +153,7 @@ CS_Course* Student::getCS_Course(const int CSCourseNum)
 	return NULL;
 }
 
+//get student's average from all (EE + CS) courses
 int Student::getAvg() // when const?
 {
 	int i = 0;
@@ -179,6 +170,7 @@ int Student::getAvg() // when const?
 	return avg;
 }
 
+//print all details of the student
 void Student::print() const
 {
 	char* StudName;
