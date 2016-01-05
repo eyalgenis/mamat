@@ -38,7 +38,7 @@ public:
 	int getAvg();
 
 	//print all details of the student
-	void print() const;
+	void print();
 
 protected:
 	EE_Course* pEEArray[MAX_COURSE_NUM]; // STATIC array - pointer to student's EE courses

@@ -1,4 +1,6 @@
+#include <iostream>
 #include "Student.H"
+using namespace std;
 
 //CONSTRUCTOR
 Student::Student(const int ID, const char* PersonName) :
@@ -8,8 +10,8 @@ Person(ID, PersonName), EECoursesTaken_(0), CSCoursesTaken_(0)
 	pCSArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
 }
 
-//DESTRUCTOR
-Student::~Student() {} // THAT'S IT? NO MORE DELETES OF ARRAYS POINT-TO-ELEMENTS?? (lior vector...)
+////DESTRUCTOR
+//Student::~Student() {} // THAT'S IT? NO MORE DELETES OF ARRAYS POINT-TO-ELEMENTS?? (lior vector...)
 
 //get student's sum of courses from EE + CS  
 int Student::getCourseCnt() const
@@ -95,7 +97,7 @@ bool Student::remCourse(const int CourseNumToRemove)
 		{
 			pEEArray[i]->~EE_Course();
 			pEEArray[i] = NULL;
-			CSCoursesTaken_++;
+			EECoursesTaken_--;
 			return true;
 		}
 
@@ -171,17 +173,17 @@ int Student::getAvg() // when const?
 }
 
 //print all details of the student
-void Student::print() const
+void Student::print()
 {
 	char* StudName;
 	char* EECourseName;
 	char* CSCourseName;
 
-	StudName = Student::getName(); // Person??
-	cout << "Student Name: " << name << endl;
+	StudName = getName(); // Person??
+	cout << "Student Name: " << StudName << endl;
 	delete []StudName; // delete copy
 
-	cout << "Student ID: " << Student::getID() << endl;
+	cout << "Student ID: " << ID_ << endl;
 
 	cout << "Average Grade: " << getAvg() << endl; // local method
 
