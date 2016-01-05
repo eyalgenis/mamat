@@ -37,10 +37,11 @@ char* CS_Course::setBook(char* new_book)
 //	if (bookName_ == NULL) return;
 	return strcpy(bookName_, new_book);
 
-}
+}
+
 int CS_Course::getCourseGrade() const
-{
-	int finalGrade = (int)((1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage());
+{	double tmp = (1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage();
+	int finalGrade = (int)(tmp + 0.5);
 	if (hwTakef_)
 		return finalGrade;
 	if (finalGrade>examGrade_)

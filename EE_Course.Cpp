@@ -10,18 +10,15 @@ int EE_Course::getFactor() const
 }
 
 int EE_Course:: getCourseGrade()
-{	int finalGrade;
-	finalGrade = ((1 - hwWeigh_)*examGrade_ + hwWeigh_*getHwAverage()) + factor_;
+{	double tmp = (1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage() + (double)factor_;
+	int finalGrade = (int)(tmp + 0.5);
 	if (finalGrade > 100)
 		return 100;
 	return finalGrade;
 }
 
-int EE_Course::setFactor(int factorToSet)
-{	
-	if (factorToSet > 100 || factorToSet < 0)
-		return 0;
-	factor_ = factorToSet;
-	return 1;
+bool EE_Course::setFactor(int factorToSet)
+{	factor_ = factorToSet;
+	return true;
 }
 

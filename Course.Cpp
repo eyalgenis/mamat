@@ -37,7 +37,8 @@ double Course::getHwWeigh() const
 }
 
 double Course::getHwAverage() const
-{	int sum = 0;
+{	if (hwAmount_ == 0) return 0;
+	int sum = 0;
 	for (int i = 0; i < hwAmount_; i++) {
 		sum += *(hwGrade_+i);
 	}
@@ -45,8 +46,8 @@ double Course::getHwAverage() const
 }
 
 int Course::getCourseGrade() const
-{	
-	int finalGrade = (int)((1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage());
+{	double tmp = (1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage();
+	int finalGrade = (int)(tmp+0.5);
 	return finalGrade;
 }
 
@@ -57,17 +58,17 @@ Course :: ~Course()
 
 bool Course::setExamGrade(int newExamGrade)
 {	if (newExamGrade > 100 || newExamGrade < 0)
-		return 0;
+		return false;
 	examGrade_ = newExamGrade;
-	return 1;
+	return true;
 }
 
 bool Course::setHwGrade(int hwNum, int newHwGrade)
 {	if (newHwGrade > 100 || newHwGrade < 0)
-		return 0;
+		return false;
 	if (hwNum > hwAmount_)
-		return 0;
+		return false;
 
 	*(hwGrade_ + hwNum) = newHwGrade;
-	return 1;
+	return true;
 }

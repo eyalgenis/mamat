@@ -22,13 +22,12 @@ int Student::getCourseCnt() const
 //create *COPY* EE course + add to array of pointers to his EE courses
 bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 {
-
 	if (EECourseToAdd == NULL)
 	{
-		return false; // ??????? exit(-1) ????????
+		return false;
 	}
 
-	if (EECoursesTaken_ == MAX_COURSE_NUM) // student has full courses
+	if (EECoursesTaken_ >= MAX_COURSE_NUM) // student has full courses
 	{
 		return false;
 	}
@@ -57,13 +56,12 @@ bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 //create *COPY* CS course + add to array of pointers to his CS courses
 bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 {
-
 	if (CSCourseToAdd == NULL)
 	{
-		return false; // ??????? exit(-1) ????????
+		return false;
 	}
 
-	if (CSCoursesTaken_ == MAX_COURSE_NUM) // student has full courses
+	if (CSCoursesTaken_ >= MAX_COURSE_NUM) // student has full courses
 	{
 		return false;
 	}
@@ -158,13 +156,16 @@ CS_Course* Student::getCS_Course(const int CSCourseNum)
 //get student's average from all (EE + CS) courses
 int Student::getAvg() // when const?
 {
+	if ((EECoursesTaken_ + CSCoursesTaken_) == 0)
+		return 0;
+
 	int i = 0;
 	int sum = 0;
 	int avg;
 
 	while (i < MAX_COURSE_NUM)
 	{
-		sum += pEEArray[i]->getCourseGrade() + pCSArray[i]->getCourseGrade();
+		sum += (int)pEEArray[i]->getCourseGrade() + (int)pCSArray[i]->getCourseGrade();
 		i++;
 	}
 

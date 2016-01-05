@@ -14,7 +14,7 @@ public:
 	Student(const int ID, const char* PersonName);
 
 	//DESTRUCTOR
-	~Student();
+//	~Student();
 
 	//get student's sum of courses from EE + CS  
 	int getCourseCnt() const;

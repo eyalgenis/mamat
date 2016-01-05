@@ -3,8 +3,8 @@
 using namespace std;
 
 //CONSTRUCTOR
-StArray::StArray(Student* pStudent) :
-	studentCount_(0)
+StArray :: StArray() :
+studentCount_(0)
 {
 	pStudentArray[MAX_STUDENT_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
 }
@@ -20,31 +20,31 @@ bool StArray::addStudent(int studentID, char* studentName)
 	if (studentName == NULL || studentCount_ == MAX_STUDENT_NUM)
 		return false;
 	Student* studentToAdd = new Student(studentID, studentName);
-	pSudentArray[studentCount_] = studentToAdd;
+	pStudentArray[studentCount_] = studentToAdd;
 	studentCount_++;
 	return true;
 }
 
 bool StArray::addEE_Course(int studentID, int courseNum, char* courseName, int hwAmount, double hwWeigh)
 {
-
-	for (int i = 0; i < studentCount_; i++)
-		if (pSudentArray[i]->getID() == studentID) {
+	for (int i = 0; i < studentCount_; i++) {
+		if (pStudentArray[i]->getID() == studentID) {
 			EE_Course* ee_courseToAdd = new EE_Course(courseNum, courseName, hwAmount, hwWeigh);
-			if (pSudentArray[i]->addEE_Course(ee_courseToAdd) == NULL)
+			if (pStudentArray[i]->addEE_Course(ee_courseToAdd) == NULL)
 				return false;
 			delete ee_courseToAdd;
 			return true;
 		}
+	}
 	return false;
 }
 
-bool StArray::addCS_Course(int studentID, int courseNum, char* courseName, int hwAmount, double hwWeigh, bool isTakef, char bookName)
+bool StArray::addCS_Course(int studentID, int courseNum, char* courseName, int hwAmount, double hwWeigh, bool isTakef, char* bookName)
 {
 	for (int i = 0; i < studentCount_; i++)
-		if (pSudentArray[i]->getID() == studentID) {
+		if (pStudentArray[i]->getID() == studentID) {
 			CS_Course* cs_courseToAdd = new CS_Course(courseNum, courseName, hwAmount, hwWeigh, isTakef, bookName);
-			if (pSudentArray[i]->addCS_Course(cs_courseToAdd) == NULL)
+			if (pStudentArray[i]->addCS_Course(cs_courseToAdd) == NULL)
 				return false;
 			delete cs_courseToAdd;
 			return 1;
@@ -71,11 +71,13 @@ bool StArray::setHwGrade(int studentID, int courseNum, int hwNum, int newHwGrade
 					return false;
 				}
 
-				FoundEECourse->setHwGrade(hwNum, newHwGrade); // yes EE
+				if (FoundEECourse->setHwGrade(hwNum, newHwGrade) == false)
+					return false;
 				return true;
 			}
 
-			FoundCSCourse->setHwGrade(hwNum, newHwGrade); // yes CS
+			if (FoundCSCourse->setHwGrade(hwNum, newHwGrade) == false)
+				return false;
 			return true;
 		}
 
@@ -104,16 +106,20 @@ bool StArray::setExamGrade(int studentID, int courseNum, int newExamGrade)
 					return false;
 				}
 
-				FoundEECourse->setExamGrade(newExamGrade); // found EE
+				if (FoundEECourse->setExamGrade(newExamGrade) == false)
+					return false;
 				return true;
 			}
 
-			FoundCSCourse->setExamGrade(newExamGrade); // found CS
+			if (FoundCSCourse->setExamGrade(newExamGrade) == false)
+				return false;
 			return true;
 		}
 
 		i++;
 	}
+
+	return false;
 }
 
 bool StArray::setFactor(int courseNum, int newFactor)

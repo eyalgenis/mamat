@@ -14,7 +14,7 @@ public:
 	~EE_Course();
 
 	// Methods to change data individually
-	int setFactor(int factorToSet); // Add factor to course
+	bool setFactor(int factorToSet); // Add factor to course
 	
 protected:
 	int factor_;
