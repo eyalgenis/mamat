@@ -1,12 +1,17 @@
 #include <iostream>
 #include "StArray.H"
 using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //CONSTRUCTOR
 StArray :: StArray() :
 studentCount_(0)
 {
-	pStudentArray[MAX_STUDENT_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
+	int i = 0;
+	while (i < MAX_STUDENT_NUM)
+		pStudentArray[i] = NULL; // STATIC (INITIALIZE ONLY)
 }
 
 //DESTRUCTOR
@@ -30,7 +35,7 @@ bool StArray::addEE_Course(int studentID, int courseNum, char* courseName, int h
 	for (int i = 0; i < studentCount_; i++) {
 		if (pStudentArray[i]->getID() == studentID) {
 			EE_Course* ee_courseToAdd = new EE_Course(courseNum, courseName, hwAmount, hwWeigh);
-			if (pStudentArray[i]->addEE_Course(ee_courseToAdd) == NULL)
+			if (pStudentArray[i]->addEE_Course(ee_courseToAdd) == false)
 				return false;
 			delete ee_courseToAdd;
 			return true;
@@ -44,7 +49,7 @@ bool StArray::addCS_Course(int studentID, int courseNum, char* courseName, int h
 	for (int i = 0; i < studentCount_; i++)
 		if (pStudentArray[i]->getID() == studentID) {
 			CS_Course* cs_courseToAdd = new CS_Course(courseNum, courseName, hwAmount, hwWeigh, isTakef, bookName);
-			if (pStudentArray[i]->addCS_Course(cs_courseToAdd) == NULL)
+			if (pStudentArray[i]->addCS_Course(cs_courseToAdd) == false)
 				return false;
 			delete cs_courseToAdd;
 			return 1;

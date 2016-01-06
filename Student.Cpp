@@ -1,13 +1,20 @@
 #include <iostream>
 #include "Student.H"
 using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //CONSTRUCTOR
 Student::Student(const int ID, const char* PersonName) :
 	Person(ID, PersonName), EECoursesTaken_(0), CSCoursesTaken_(0)
 {
-	pEEArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
-	pCSArray[MAX_COURSE_NUM] = { 0 }; // STATIC (INITIALIZE ONLY)
+	int i = 0;
+	while (i < MAX_COURSE_NUM)
+	{
+		pEEArray[i] = NULL; // STATIC (INITIALIZE ONLY)
+		pCSArray[i] = NULL; // STATIC (INITIALIZE ONLY)
+	}
 }
 
 ////DESTRUCTOR

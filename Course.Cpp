@@ -1,4 +1,10 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif // !_CRT_SECURE_NO_WARNINGS
 #include "Course.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 Course :: Course(int courseNum, char* courseName, int hwAmount, double hwWeigh) :
 	courseNum_(courseNum), hwAmount_(hwAmount), hwWeigh_(hwWeigh), examGrade_(0) {

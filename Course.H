@@ -1,10 +1,8 @@
 #ifndef COURSE_H
 #define COURSE_H
-
-#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <algorithm>
-#include <windows.h>
 
 class Course {
 public:

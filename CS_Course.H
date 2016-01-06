@@ -1,7 +1,9 @@
 #ifndef CS_COURSE_H
 #define CS_COURSE_H
-
 #include "Course.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 class CS_Course : public Course {
 public:

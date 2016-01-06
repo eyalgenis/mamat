@@ -1,4 +1,7 @@
 #include "EE_Course.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 EE_Course::EE_Course(int courseNum, char* courseName, int hwAmount, double hwWeigh) :
 	Course(courseNum, courseName, hwAmount, hwWeigh), factor_(0) {}

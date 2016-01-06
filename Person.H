@@ -2,6 +2,9 @@
 #define _PERSON_H_
 #include <iostream>
 #include "Proj.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 class Person {
 

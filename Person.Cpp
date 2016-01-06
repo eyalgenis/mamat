@@ -1,4 +1,10 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif // !_CRT_SECURE_NO_WARNINGS
 #include "Person.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // CONSTRUCTOR
 Person::Person(const int ID, const char* PersonName) :

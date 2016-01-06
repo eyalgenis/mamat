@@ -6,6 +6,9 @@
 #include "Proj.H"
 #include "EE_Course.H"
 #include "CS_Course.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 class Student : public Person {
 

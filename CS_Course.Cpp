@@ -1,4 +1,10 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif // !_CRT_SECURE_NO_WARNINGS
 #include "CS_Course.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 CS_Course::CS_Course(int courseNum, char* courseName, int hwAmount, double hwWeigh, bool hwTakef, char* bookName) :
 	Course(courseNum, courseName, hwAmount, hwWeigh), hwTakef_(hwTakef) {
