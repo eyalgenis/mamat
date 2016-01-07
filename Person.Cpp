@@ -1,10 +1,12 @@
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif // !_CRT_SECURE_NO_WARNINGS
 #include "Person.H"
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 // CONSTRUCTOR
 Person::Person(const int ID, const char* PersonName) :
@@ -17,7 +19,7 @@ Person::Person(const int ID, const char* PersonName) :
 //DESTRUCTOR
 Person::~Person()
 {
-	delete []PersonName_;
+	delete[]PersonName_;
 }
 
 

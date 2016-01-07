@@ -1,10 +1,12 @@
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif // !_CRT_SECURE_NO_WARNINGS
 #include "CS_Course.H"
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 CS_Course::CS_Course(int courseNum, char* courseName, int hwAmount, double hwWeigh, bool hwTakef, char* bookName) :
 	Course(courseNum, courseName, hwAmount, hwWeigh), hwTakef_(hwTakef) {
@@ -13,13 +15,14 @@ CS_Course::CS_Course(int courseNum, char* courseName, int hwAmount, double hwWei
 }
 
 CS_Course::~CS_Course()
-{	if (bookName_ != NULL)
-	{	delete[] bookName_;
-	}
+{
+	if (bookName_ != NULL)
+		delete[] bookName_;
 }
 
 bool CS_Course::isTakef() const
-{	return hwTakef_;
+{
+	return hwTakef_;
 }
 
 char * CS_Course::getBook() const // do we need to make a copy?!?!?
@@ -30,23 +33,25 @@ char * CS_Course::getBook() const // do we need to make a copy?!?!?
 }
 
 bool CS_Course::setTakef(bool takef)
-{	hwTakef_ = takef;
+{
+	hwTakef_ = takef;
 	return 1;
 }
 
 char* CS_Course::setBook(char* new_book)
-{ 
+{
 	// destroy exiting book
 	delete[] bookName_;
 	// create new data
 	bookName_ = new char[strlen(new_book) + 1];
-//	if (bookName_ == NULL) return;
+	//	if (bookName_ == NULL) return;
 	return strcpy(bookName_, new_book);
 
 }
 
 int CS_Course::getCourseGrade() const
-{	double tmp = (1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage();
+{
+	double tmp = (1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage();
 	int finalGrade = (int)(tmp + 0.5);
 	if (hwTakef_)
 		return finalGrade;

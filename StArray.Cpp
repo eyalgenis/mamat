@@ -1,17 +1,23 @@
-#include <iostream>
 #include "StArray.H"
-using namespace std;
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 //CONSTRUCTOR
-StArray :: StArray() :
-studentCount_(0)
+StArray::StArray() :
+	studentCount_(0)
 {
 	int i = 0;
 	while (i < MAX_STUDENT_NUM)
+	{
 		pStudentArray[i] = NULL; // STATIC (INITIALIZE ONLY)
+		i++;
+	}
 }
 
 //DESTRUCTOR
@@ -22,8 +28,20 @@ StArray::~StArray()
 
 bool StArray::addStudent(int studentID, char* studentName)
 {
-	if (studentName == NULL || studentCount_ == MAX_STUDENT_NUM)
+	if ((studentName == NULL) || (studentCount_ == MAX_STUDENT_NUM) || (studentID < 0))
 		return false;
+
+	int i = 0;
+
+	while (i < studentCount_)
+	{
+		if (pStudentArray[i]->getID() == studentID)
+		{
+			return false; //student is already in array
+		}
+		i++;
+	}
+
 	Student* studentToAdd = new Student(studentID, studentName);
 	pStudentArray[studentCount_] = studentToAdd;
 	studentCount_++;
@@ -32,6 +50,8 @@ bool StArray::addStudent(int studentID, char* studentName)
 
 bool StArray::addEE_Course(int studentID, int courseNum, char* courseName, int hwAmount, double hwWeigh)
 {
+	if (hwWeigh < 0 || hwWeigh > 1)
+		return false;
 	for (int i = 0; i < studentCount_; i++) {
 		if (pStudentArray[i]->getID() == studentID) {
 			EE_Course* ee_courseToAdd = new EE_Course(courseNum, courseName, hwAmount, hwWeigh);
@@ -46,6 +66,8 @@ bool StArray::addEE_Course(int studentID, int courseNum, char* courseName, int h
 
 bool StArray::addCS_Course(int studentID, int courseNum, char* courseName, int hwAmount, double hwWeigh, bool isTakef, char* bookName)
 {
+	if (hwWeigh < 0 || hwWeigh > 1)
+		return false;
 	for (int i = 0; i < studentCount_; i++)
 		if (pStudentArray[i]->getID() == studentID) {
 			CS_Course* cs_courseToAdd = new CS_Course(courseNum, courseName, hwAmount, hwWeigh, isTakef, bookName);
@@ -131,21 +153,21 @@ bool StArray::setFactor(int courseNum, int newFactor)
 {
 	EE_Course* FoundEECourse;
 	int i = 0;
+	bool foundOne = false;
 
 	while (i < studentCount_)
 	{
 		FoundEECourse = pStudentArray[i]->getEE_Course(courseNum);
-		if (FoundEECourse == NULL) // course not found
+		if (FoundEECourse != NULL) // course not found for this student
 		{
-			return false;
+			FoundEECourse->setFactor(newFactor); // set factor
+			foundOne = true;
 		}
-
-		FoundEECourse->setFactor(newFactor); // set factor and return
 
 		i++;
 	}
 
-	return true;
+	return foundOne;
 }
 
 bool StArray::printStudent(int studentID)
@@ -156,11 +178,10 @@ bool StArray::printStudent(int studentID)
 	{
 		if (pStudentArray[i]->getID() == studentID)
 		{
-			cout << "Printing student" << endl;
-			cout << "================" << endl;
 			pStudentArray[i]->print();
 			return true;
 		}
+	i++;
 	}
 
 	return false;
@@ -168,14 +189,12 @@ bool StArray::printStudent(int studentID)
 
 void StArray::printAll()
 {
-	cout << "Prining all students" << endl;
-	cout << "####################" << endl;
-
 	int i = 0;
 
 	while (i < studentCount_)
 	{
 		pStudentArray[i]->print();
+		i++;
 	}
 
 	return;
@@ -186,7 +205,7 @@ void StArray::resetStArray()
 	int i = 0;
 	while (i < studentCount_)
 	{
-		pStudentArray[i]->~Student();
+		delete pStudentArray[i];
 		pStudentArray[i] = NULL;
 	}
 

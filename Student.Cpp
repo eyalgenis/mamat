@@ -1,9 +1,12 @@
-#include <iostream>
 #include "Student.H"
-using namespace std;
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 //CONSTRUCTOR
 Student::Student(const int ID, const char* PersonName) :
@@ -14,6 +17,7 @@ Student::Student(const int ID, const char* PersonName) :
 	{
 		pEEArray[i] = NULL; // STATIC (INITIALIZE ONLY)
 		pCSArray[i] = NULL; // STATIC (INITIALIZE ONLY)
+		i++;
 	}
 }
 
@@ -29,14 +33,29 @@ int Student::getCourseCnt() const
 //create *COPY* EE course + add to array of pointers to his EE courses
 bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 {
-	if (EECourseToAdd == NULL)
-	{
+	if ((EECourseToAdd == NULL) || (EECoursesTaken_ >= MAX_COURSE_NUM))
 		return false;
+
+	int i = 0;
+	while (i < EECoursesTaken_)
+	{
+		if (pEEArray[i]->getNum() == EECourseToAdd->getNum())
+		{
+			return false;
+		}
+
+		i++;
 	}
 
-	if (EECoursesTaken_ >= MAX_COURSE_NUM) // student has full courses
+	i = 0;
+	while (i < CSCoursesTaken_)
 	{
-		return false;
+		if (pCSArray[i]->getNum() == EECourseToAdd->getNum())
+		{
+			return false;
+		}
+
+		i++;
 	}
 
 	EE_Course* CopyToAdd;
@@ -44,10 +63,10 @@ bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 
 	CopyToAdd->setFactor(EECourseToAdd->getFactor());
 
-	int i = 0;
+	i = 0;
 	while (i < MAX_COURSE_NUM) // add course to available cell in array
 	{
-		if (pEEArray[i] != NULL)
+		if (pEEArray[i] == NULL)
 		{
 			pEEArray[i] = CopyToAdd;
 			EECoursesTaken_++;
@@ -63,23 +82,38 @@ bool Student::addEE_Course(EE_Course* EECourseToAdd)  // pointer to EE_Course
 //create *COPY* CS course + add to array of pointers to his CS courses
 bool Student::addCS_Course(CS_Course* CSCourseToAdd)
 {
-	if (CSCourseToAdd == NULL)
-	{
+	if ((CSCourseToAdd == NULL) || (CSCoursesTaken_ >= MAX_COURSE_NUM))
 		return false;
+
+	int i = 0;
+	while (i < CSCoursesTaken_)
+	{
+		if (pCSArray[i]->getNum() == CSCourseToAdd->getNum())
+		{
+			return false;
+		}
+
+		i++;
 	}
 
-	if (CSCoursesTaken_ >= MAX_COURSE_NUM) // student has full courses
+	i = 0;
+	while (i < EECoursesTaken_)
 	{
-		return false;
+		if (pEEArray[i]->getNum() == CSCourseToAdd->getNum())
+		{
+			return false;
+		}
+
+		i++;
 	}
 
 	CS_Course* CopyToAdd;
 	CopyToAdd = new CS_Course(CSCourseToAdd->getNum(), CSCourseToAdd->getName(), CSCourseToAdd->getHwNum(), CSCourseToAdd->getHwWeigh(), CSCourseToAdd->isTakef(), CSCourseToAdd->getBook());
 
-	int i = 0;
+	i = 0;
 	while (i < MAX_COURSE_NUM)
 	{
-		if (pCSArray[i] != NULL)
+		if (pCSArray[i] == NULL)
 		{
 			pCSArray[i] = CopyToAdd;
 			CSCoursesTaken_++;
@@ -130,7 +164,7 @@ bool Student::remCourse(const int CourseNumToRemove)
 EE_Course* Student::getEE_Course(const int EECourseNum)
 {
 	int i = 0;
-	while (i < MAX_COURSE_NUM)
+	while (i < EECoursesTaken_)
 	{
 		if (pEEArray[i]->getNum() == EECourseNum)
 		{
@@ -147,7 +181,7 @@ EE_Course* Student::getEE_Course(const int EECourseNum)
 CS_Course* Student::getCS_Course(const int CSCourseNum)
 {
 	int i = 0;
-	while (i < MAX_COURSE_NUM)
+	while (i < CSCoursesTaken_)
 	{
 		if (pCSArray[i]->getNum() == CSCourseNum)
 		{
@@ -168,16 +202,23 @@ int Student::getAvg() // when const?
 
 	int i = 0;
 	int sum = 0;
-	int avg;
+	double avg;
 
-	while (i < MAX_COURSE_NUM)
+	while (i < EECoursesTaken_)
 	{
-		sum += (int)pEEArray[i]->getCourseGrade() + (int)pCSArray[i]->getCourseGrade();
+		sum += pEEArray[i]->getCourseGrade();
 		i++;
 	}
 
-	avg = sum / (EECoursesTaken_ + CSCoursesTaken_);
-	return avg;
+	i = 0;
+	while (i < CSCoursesTaken_)
+	{
+		sum += pCSArray[i]->getCourseGrade();
+		i++;
+	}
+
+	avg = (double)sum / (double)(EECoursesTaken_ + CSCoursesTaken_);
+	return (int)(avg+0.5);
 }
 
 //print all details of the student
@@ -194,26 +235,30 @@ void Student::print()
 	cout << "Student ID: " << ID_ << endl;
 
 	cout << "Average Grade: " << getAvg() << endl; // local method
-
+	cout << "" << endl;
 	cout << "EE Courses:" << endl;
 
 	int i = 0;
 	while (i < EECoursesTaken_)
 	{
 		EECourseName = pEEArray[i]->getName();
-		cout << pEEArray[i]->getNum() << " " << EECourseName << " " << pEEArray[i]->getCourseGrade() << endl;
+		cout << pEEArray[i]->getNum() << " " << EECourseName << ": " << pEEArray[i]->getCourseGrade() << endl;
 		delete[] EECourseName;
+		i++;
 	}
 
+	cout << "" << endl;
 	cout << "CS Courses:" << endl;
 
 	i = 0;
 	while (i < CSCoursesTaken_)
 	{
 		CSCourseName = pCSArray[i]->getName();
-		cout << pCSArray[i]->getNum() << " " << CSCourseName << " " << pCSArray[i]->getCourseGrade() << endl;
+		cout << pCSArray[i]->getNum() << " " << CSCourseName << ": " << pCSArray[i]->getCourseGrade() << endl;
 		delete[] CSCourseName;
+		i++;
 	}
 
+	cout << "" << endl;
 	return;
 }

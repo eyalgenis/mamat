@@ -1,14 +1,16 @@
 #ifndef _STUDENT_H_
 #define _STUDENT_H_
-#include <iostream>
-#include <stdbool.h>
 #include "Person.H"
-#include "Proj.H"
 #include "EE_Course.H"
 #include "CS_Course.H"
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 class Student : public Person {
 
@@ -17,7 +19,7 @@ public:
 	Student(const int ID, const char* PersonName);
 
 	//DESTRUCTOR
-//	~Student();
+	//	~Student();
 
 	//get student's sum of courses from EE + CS  
 	int getCourseCnt() const;

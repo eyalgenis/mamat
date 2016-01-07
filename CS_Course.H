@@ -1,9 +1,14 @@
-#ifndef CS_COURSE_H
-#define CS_COURSE_H
+#ifndef _CS_COURSE_H_
+#define _CS_COURSE_H_
 #include "Course.H"
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 class CS_Course : public Course {
 public:

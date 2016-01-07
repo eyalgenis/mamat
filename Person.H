@@ -1,10 +1,13 @@
 #ifndef _PERSON_H_
 #define _PERSON_H_
-#include <iostream>
 #include "Proj.H"
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 class Person {
 
@@ -15,7 +18,7 @@ public:
 	//DESTRUCTOR
 	~Person(); // ???????????
 
-	//get ID of person
+			   //get ID of person
 	int getID() const;
 
 	//get *COPY* Name of person
@@ -27,3 +30,4 @@ protected:
 };
 
 #endif
+

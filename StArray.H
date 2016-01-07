@@ -1,14 +1,16 @@
-#ifndef STARRAY_H
-#define STARRAY_H
-#include <iostream>
-#include <stdbool.h>
+#ifndef _STARRAY_H_
+#define _STARRAY_H_
 #include "Student.H"
-#include "Proj.H"
 #include "EE_Course.H"
 #include "CS_Course.H"
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 class StArray {
 public:

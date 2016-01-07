@@ -1,7 +1,12 @@
 #include "EE_Course.H"
-#include <stdio.h>
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 EE_Course::EE_Course(int courseNum, char* courseName, int hwAmount, double hwWeigh) :
 	Course(courseNum, courseName, hwAmount, hwWeigh), factor_(0) {}
@@ -9,19 +14,23 @@ EE_Course::EE_Course(int courseNum, char* courseName, int hwAmount, double hwWei
 EE_Course::~EE_Course() {}
 
 int EE_Course::getFactor() const
-{	return factor_;
+{
+	return factor_;
 }
 
-int EE_Course:: getCourseGrade()
-{	double tmp = (1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage() + (double)factor_;
+int EE_Course::getCourseGrade()
+{
+	double tmp = (1 - (double)hwWeigh_)*(double)examGrade_ + (double)hwWeigh_*(double)getHwAverage() + (double)factor_;
 	int finalGrade = (int)(tmp + 0.5);
 	if (finalGrade > 100)
 		return 100;
+	if (finalGrade < 0)
+		return 0;
 	return finalGrade;
 }
 
 bool EE_Course::setFactor(int factorToSet)
-{	factor_ = factorToSet;
+{
+	factor_ = factorToSet;
 	return true;
 }
-

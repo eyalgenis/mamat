@@ -1,8 +1,13 @@
-#ifndef COURSE_H
-#define COURSE_H
-#include <stdio.h>
+#ifndef _COURSE_H_
+#define _COURSE_H_
+#include "Proj.H"
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <string.h>
+#include <stdbool.h>
+
+using namespace std;
 
 class Course {
 public:
@@ -20,7 +25,7 @@ public:
 	int getCourseGrade() const; // Final grade on this course
 	~Course(); // Destructor
 
-	// Methods to change data individually
+			   // Methods to change data individually
 	bool setExamGrade(int newExamGrade);
 	bool setHwGrade(int hwNum, int newHwGrade);
 

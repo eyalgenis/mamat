@@ -1,0 +1,158 @@
+Add_EE_Course failed
+Add_EE_Course failed
+Add_CS_Course failed
+Set_HW_Grage failed
+Set_HW_Grage failed
+Set_HW_Grage failed
+Set_HW_Grage failed
+Set_HW_Grage failed
+Set_HW_Grage failed
+Set_HW_Grage failed
+Set_Exam_Grade failed
+Set_Exam_Grade failed
+Print_Student failed
+Student Name: Johnny
+Student ID: 1
+Average Grade: 79
+
+EE Courses:
+100 Malam: 95
+103 Mitug: 48
+105 Linears: 93
+
+CS Courses:
+
+Student Name: Omry
+Student ID: 2
+Average Grade: 72
+
+EE Courses:
+100 Malam: 69
+103 Mitug: 85
+105 Linears: 56
+
+CS Courses:
+200 Combinatorics: 78
+
+Student Name: Asif
+Student ID: 3
+Average Grade: 87
+
+EE Courses:
+100 Malam: 77
+103 Mitug: 69
+105 Linears: 100
+
+CS Courses:
+200 Combinatorics: 100
+
+Student Name: Idan
+Student ID: 5
+Average Grade: 63
+
+EE Courses:
+
+CS Courses:
+200 Combinatorics: 63
+
+Set_Factor failed
+Set_Factor failed
+Student Name: Johnny
+Student ID: 1
+Average Grade: 58
+
+EE Courses:
+100 Malam: 95
+103 Mitug: 75
+105 Linears: 3
+
+CS Courses:
+
+Student Name: Omry
+Student ID: 2
+Average Grade: 62
+
+EE Courses:
+100 Malam: 69
+103 Mitug: 100
+105 Linears: 0
+
+CS Courses:
+200 Combinatorics: 78
+
+Student Name: Asif
+Student ID: 3
+Average Grade: 71
+
+EE Courses:
+100 Malam: 77
+103 Mitug: 96
+105 Linears: 10
+
+CS Courses:
+200 Combinatorics: 100
+
+Student Name: Idan
+Student ID: 5
+Average Grade: 63
+
+EE Courses:
+
+CS Courses:
+200 Combinatorics: 63
+
+Student Name: Johnny
+Student ID: 1
+Average Grade: 58
+
+EE Courses:
+100 Malam: 95
+103 Mitug: 75
+105 Linears: 3
+
+CS Courses:
+
+Student Name: Johnny
+Student ID: 1
+Average Grade: 58
+
+EE Courses:
+100 Malam: 95
+103 Mitug: 75
+105 Linears: 3
+
+CS Courses:
+
+Student Name: Omry
+Student ID: 2
+Average Grade: 62
+
+EE Courses:
+100 Malam: 69
+103 Mitug: 100
+105 Linears: 0
+
+CS Courses:
+200 Combinatorics: 78
+
+Student Name: Asif
+Student ID: 3
+Average Grade: 71
+
+EE Courses:
+100 Malam: 77
+103 Mitug: 96
+105 Linears: 10
+
+CS Courses:
+200 Combinatorics: 100
+
+Student Name: Idan
+Student ID: 5
+Average Grade: 63
+
+EE Courses:
+
+CS Courses:
+200 Combinatorics: 63
+
