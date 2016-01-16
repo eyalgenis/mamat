@@ -13,10 +13,6 @@ Complex Complex::operator-(const Complex & other)
 	double result_imaginary = imag_ - other.imag_;
 	return Complex(result_real, result_imaginary);
 }
-Complex Complex::operator=(const Complex & other)
-{
-	return Complex(other.real_,other.imag_);
-}
 Complex Complex::operator*(const Complex & other)
 {
 	double result_real = (real_ * other.real_) - (imag_ * other.imag_);
@@ -29,12 +25,6 @@ Complex Complex::operator/(const Complex & other)
 	double result_imaginary = ((other.real_ * imag_) - (real_ * other.imag_)) / ((other.real_ *other.real_) + (other.imag_ * other.imag_));
 	return Complex(result_real, result_imaginary);
 }
-//ostream &operator<<(ostream&output, const Complex &complex)
-//{
-//	output << complex.get_Real() << " + ";
-//	output << complex.get_Im() << "i";
-//	return output;
-//}
 Complex operator+(const Complex  &num1, const Complex &num2)
 {
 	double result_real = num1.real_ + num2.real_;
@@ -53,6 +43,11 @@ Complex operator/(const Complex & num1, const Complex & num2)
 	double result_real = ((num1.real_ * num2.real_) + (num1.imag_ * num2.imag_))/((num2.real_ * num2.real_) + (num2.imag_ * num2.imag_));
 	double result_imaginary = ((num2.real_ * num1.imag_) - (num1.real_ * num2.imag_)) / ((num2.real_ * num2.real_) + (num2.imag_ * num2.imag_));
 	return Complex(result_real, result_imaginary);
+}
+
+bool operator==(const Complex & num1, const Complex & num2)
+{
+	return ((num1.real_ == num2.real_) && (num1.imag_ == num2.imag_));
 }
 
 std::ostream& operator<<(ostream& out, const Complex &num)

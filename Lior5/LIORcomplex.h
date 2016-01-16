@@ -14,9 +14,9 @@ public:
 	Complex() : real_(0.0), imag_(0.0) {};
 	Complex operator+(const Complex& other);
 	Complex operator-(const Complex& other);
-	Complex operator=(const Complex& other);
 	Complex operator*(const Complex& other);
 	Complex operator/(const Complex& other);
+
 
 	double get_Im() const { return imag_; }
 	double get_Real() const { return real_; }
@@ -24,6 +24,7 @@ public:
 	friend Complex operator+(const Complex  &num1, const Complex &num2);
 	friend Complex operator*(const Complex  &num1, const Complex &num2);
 	friend Complex operator/(const Complex  &num1, const Complex &num2);
+	friend bool operator==(const Complex  &num1, const Complex &num2);
 
 	friend std::ostream &operator<<(std::ostream &output, const Complex &num);
 	friend double abs(const Complex num);
