@@ -148,9 +148,6 @@ Vec<T> Vec<T>::operator[](const Vec<unsigned int>& ind) const
 
 	Vec<T> new_vec;
 
-	//typename list<T>::const_iterator iter_ind;
-	//iter_ind = ind.vals_.begin();
-	//typename list<T>::const_iterator iter = vals_.begin();
 	unsigned int i=0;
 	while (i < ind.size()) {
 		if (ind[i] >= this->size())
@@ -237,18 +234,16 @@ ostream & operator<<(ostream & ro, const Vec<T>& v)
 template<class T>
 Vec<T> range(T start, unsigned int size)
 {
-	Vec<T>* pVec = new new_vec();
+	Vec<T> new_vec;
 
-	list<T>::const_iterator iter = pVec->begin();
-	int i = 0;
+	unsigned int i = 0;
 	while (i < size) {
-		*iter = start;
+		new_vec.push_back(start);
 		start++;
-		iter++;
 		i++;
 	}
 
-	return *pVec;
+	return new_vec;
 }
 
 #endif // _VEC_IMPL_H_
