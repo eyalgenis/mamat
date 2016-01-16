@@ -1,0 +1,255 @@
+#ifndef _VEC_IMPL_H_
+#define _VEC_IMPL_H_
+#include <list>
+#include <exception>
+#include <iostream>
+#include <cmath>
+
+const char* ExceptionWrongDimensions::what() const throw()
+{
+	return "operand dimensions must agree";
+}
+
+const char* ExceptionEmptyOperand::what() const throw()
+{
+	return "empty operand";
+}
+
+const char* ExceptionIndexExceed::what() const throw()
+{
+	return "index exeeds operand dimensions";
+}
+
+template<class T>
+Vec<T>::Vec(const T & el)
+{
+	this->vals_.push_back(el);
+}
+
+template<class T>
+void Vec<T>::push_back(T el)
+{
+	vals_.push_back(el);
+}
+
+template<class T>
+unsigned int Vec<T>::size() const
+{
+	return vals_.size();
+}
+
+template<class T>
+Vec<T> Vec<T>::operator+(const Vec & rhs) const
+{
+	ExceptionWrongDimensions e_wng_dim;
+	ExceptionEmptyOperand e_empty;
+	
+	Vec new_vec;
+	if (this->vals_.size() != rhs.size())
+		throw (e_wng_dim);
+	if (this->vals_.size() == 0)
+		throw (e_empty);
+	
+	int i = 0;
+	
+	while (i < this->vals_.size()) {
+		new_vec.push_back((*this)[i] + rhs[i]);
+		i++;
+	}
+
+	return new_vec;
+}
+
+template<class T>
+Vec<T> Vec<T>::operator*(const T & rhs) const
+{
+	ExceptionEmptyOperand e_empty;
+
+	Vec<T> new_vec();
+
+	if (rhs.size() == 0)
+		throw (e_empty);
+
+	int i = 0;
+	list<T>::const_iterator iter = this->begin();
+
+	while (i < this->size()) {
+		new_vec.push_back(rhs * (*iter));
+		i++;
+		iter++;
+	}
+
+	return new_vec;
+}
+
+template<class T>
+T & Vec<T>::operator[](unsigned int ind)
+{
+	ExceptionIndexExceed e_idx_exc;
+	if (ind >= this->vals_.size())
+		throw(e_idx_exc);
+	
+	unsigned int i = 0;
+	list<T>::const_iterator iter = vals_.begin();
+	while (i < ind) {
+		i++;
+		iter++;
+	}
+
+	return const_cast<T&>(*iter);
+}
+
+template<class T>
+const T & Vec<T>::operator[](unsigned int ind) const
+{
+	ExceptionIndexExceed e_idx_exc;
+	if (ind >= this->vals_.size())
+		throw(e_idx_exc);
+
+	int i = 0;
+	list<T>::const_iterator iter = vals_.begin();
+	while (i < ind) {
+		i++;
+		iter++;
+	}
+
+	return *iter;
+}
+
+template<class T>
+Vec<T> Vec<T>::operator,(const Vec & rhs) const
+{
+	ExceptionEmptyOperand e_empty;
+	if (rhs.size() == 0)
+		throw (e_empty);
+
+	Vec<T> new_vec;
+
+	typename list<T>::const_iterator iter = this->begin();
+	
+	while (iter != this->end()) {
+		new_vec.push_back(*iter);
+		iter++;
+	}
+
+	iter = rhs.begin();
+	while (iter != rhs.end()) {
+		new_vec.push_back(*iter);
+		iter++;
+	}
+
+	return new_vec;
+}
+
+template<class T>
+Vec<T> Vec<T>::operator[](const Vec<unsigned int>& ind) const
+{
+	ExceptionIndexExceed e_idx_exc;
+
+	Vec<T>* pVec = new new_vec();
+
+	list<T>::const_iterator iter_ind = ind.begin();
+	list<T>::const_iterator iter = vals_.begin();
+	
+	while (iter_ind < ind.end()) {
+		if (*(iter_ind) > vals_.end())
+			throw (e_idx_exc);
+
+		for (int i = 0; i < (*iter_ind); i++, iter++) {}
+		
+		pVec->push_back(this->(*iter));
+		iter_ind++;
+	}
+
+	return *pVec;
+}
+
+
+template<class T>
+Vec<T> operator*(const T & lhs, const Vec<T>& rhs)
+{
+	ExceptionEmptyOperand e_empty;
+
+	Vec<T> new_vec();
+
+	if (rhs.size() == 0)
+		throw (e_empty);
+
+	int i = 0;
+	list<T>::const_iterator iter = rhs.begin();
+
+	while (i < rhs.size()) {
+		new_vec.push_back(lhs * (*iter));
+		i++;
+		iter++;
+	}
+
+	return new_vec;
+
+}
+
+//template<class T>
+//ostream & operator<<(ostream & ro, const Vec<T>& v)
+//{
+//	ExceptionEmptyOperand e_empty_op;
+//	if (v.size() == 0) {
+//		cout << "v1 empty" << endl;
+//		throw (e_empty_op);
+//		cout << "v1 empty" << endl;
+//	}
+//
+//	typename list<T>::const_iterator iter;
+//
+//	ro << "(" << *v.begin();
+//	iter = v.begin();
+//	iter++;
+//
+//	while (iter != v.end()) {
+//		ro << ",\t" << (*iter);
+//		iter++;
+//	}
+//
+//	ro << ")";
+//
+//	return ro;
+//}
+
+template<class T>
+ostream & operator<<(ostream & ro, const Vec<T>& v)
+{
+	ExceptionEmptyOperand e_empty_op;
+	if (v.size() == 0)
+	{
+		throw (e_empty_op);// ExceptionEmptyOperand;
+	}
+	typename list<T>::const_iterator it;
+	ro << "(" << *v.begin();
+	it = v.begin();
+	++it;
+	for (it = it; it != v.end(); it++)
+	{
+		ro << ",\t" << *it;
+	}
+	ro << ")";
+	return ro;
+}
+
+
+template<class T>
+Vec<T> range(T start, unsigned int size)
+{
+	Vec<T>* pVec = new new_vec();
+
+	list<T>::const_iterator iter = pVec->begin();
+	int i = 0;
+	while (i < size) {
+		*iter = start;
+		start++;
+		iter++;
+		i++;
+	}
+
+	return *pVec;
+}
+
+#endif // _VEC_IMPL_H_

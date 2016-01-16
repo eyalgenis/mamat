@@ -1,3 +1,0 @@
-#!/bin/bash
-
-cat ./`ls -dt */ | head -1 | sort`/* 2>/dev/null
