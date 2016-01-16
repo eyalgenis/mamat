@@ -50,7 +50,7 @@ Vec<T> Vec<T>::operator+(const Vec & rhs) const
 	if (this->vals_.size() == 0)
 		throw (e_empty);
 	
-	int i = 0;
+	unsigned int i = 0;
 	
 	while (i < this->vals_.size()) {
 		new_vec.push_back((*this)[i] + rhs[i]);
@@ -65,13 +65,13 @@ Vec<T> Vec<T>::operator*(const T & rhs) const
 {
 	ExceptionEmptyOperand e_empty;
 
-	Vec<T> new_vec();
+	Vec<T> new_vec;
 
-	if (rhs.size() == 0)
-		throw (e_empty);
+	//if (rhs.size() == 0)
+	//	throw (e_empty);
 
-	int i = 0;
-	list<T>::const_iterator iter = this->begin();
+	unsigned int i = 0;
+	typename list<T>::const_iterator iter = this->begin();
 
 	while (i < this->size()) {
 		new_vec.push_back(rhs * (*iter));
@@ -106,7 +106,7 @@ const T & Vec<T>::operator[](unsigned int ind) const
 	if (ind >= this->vals_.size())
 		throw(e_idx_exc);
 
-	int i = 0;
+	unsigned int i = 0;
 	list<T>::const_iterator iter = vals_.begin();
 	while (i < ind) {
 		i++;
@@ -146,22 +146,21 @@ Vec<T> Vec<T>::operator[](const Vec<unsigned int>& ind) const
 {
 	ExceptionIndexExceed e_idx_exc;
 
-	Vec<T>* pVec = new new_vec();
+	Vec<T> new_vec;
 
-	list<T>::const_iterator iter_ind = ind.begin();
-	list<T>::const_iterator iter = vals_.begin();
-	
-	while (iter_ind < ind.end()) {
-		if (*(iter_ind) > vals_.end())
+	//typename list<T>::const_iterator iter_ind;
+	//iter_ind = ind.vals_.begin();
+	//typename list<T>::const_iterator iter = vals_.begin();
+	unsigned int i=0;
+	while (i < ind.size()) {
+		if (ind[i] >= this->size())
 			throw (e_idx_exc);
 
-		for (int i = 0; i < (*iter_ind); i++, iter++) {}
-		
-		pVec->push_back(this->(*iter));
-		iter_ind++;
+		new_vec.push_back((*this)[ind[i]]);
+		i++;
 	}
 
-	return *pVec;
+	return new_vec;
 }
 
 
@@ -170,12 +169,12 @@ Vec<T> operator*(const T & lhs, const Vec<T>& rhs)
 {
 	ExceptionEmptyOperand e_empty;
 
-	Vec<T> new_vec();
+	Vec<T> new_vec;
 
 	if (rhs.size() == 0)
 		throw (e_empty);
 
-	int i = 0;
+	unsigned int i = 0;
 	list<T>::const_iterator iter = rhs.begin();
 
 	while (i < rhs.size()) {
