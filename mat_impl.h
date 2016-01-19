@@ -102,89 +102,75 @@ Mat<T> Mat<T>::operator*(const T & rhs) const
 }
 
 template<class T>
-Mat<T> Mat<T>::operator*(const Mat<T>& rhs) const // MATRIX MULTIPLICATION
+Mat<T> Mat<T>::operator*(const Mat<T>& rhs) const
 {
 	unsigned int n = this->height();
-	unsigned int m1 = w_();
-	unsigned int m2 = rhs.height();
-	unsigned int k = rhs.width();
+	unsigned int m = this->width();
+	unsigned int p = rhs.width();
+	Mat<T> new_mat(p);
+	Vec<T> vec_line, vec_temp;
+	T elem;
+	ExceptionWrongDimensions e_wrong_dim;
+	ExceptionEmptyOperand e_empty_op;
 
-	ExceptionWrongDimensions EXCEPwrongdimensions;
-	ExceptionEmptyOperand EXCEPemptyoperand;
+	if (this->width() != rhs.height())
+		throw(e_wrong_dim);
 
-	if (m1 != m2)
-		throw(EXCEPwrongdimensions);
+	if ((rhs.width() == 0) || (rhs.height() == 0) || (this->width() == 0) || (this->height() == 0))
+		throw(e_empty_op);
 
-	if (n == 0 || m1 == 0 || m2 == 0 || k == 0)
-		throw(EXCEPemptyoperand);
+	unsigned int i = 0;
+	while (i < n) {
 
-	Mat<T> resultMAT(k);
-
-	T el;
-	Vec<T> BlankVec;
-	Vec<T> LineVec;
-
-	unsigned int left_row = 0;
-	unsigned int right_col = 0;
-	unsigned int inner = 0;
-
-	while (left_row < n)
-	{
-		while (right_col < k)
-		{
-			el = 0;
-
-			while (inner < m1)
-			{
-				el += ((*this)[left_row][inner] * rhs[inner][right_col]); // compute multiplication
-				inner++;
+		unsigned int j = 0;
+		while (j < p) {
+			elem = 0;
+			unsigned int k = 0;
+			while (k < m) {
+				elem = elem + ((*this)[i][k] * rhs[k][j]);
+				k++;
 			}
+			vec_line.push_back(elem);
 
-			LineVec.push_back(el); // insert element to line_vector
-
-			right_col++;
+			j++;
 		}
+		new_mat.push_back(vec_line);
+		vec_line = vec_temp;
 
-		resultMAT.push_back(LineVec); // insert line_vector to resultmat current row
-		LineVec = BlankVec; // reset line_vector
-
-		left_row++;
+		i++;
 	}
 
-	return resultMAT;
+	return new_mat;
 }
 
 template<class T>
 Mat<T> Mat<T>::operator,(const Mat<T>& rhs) const
 {
+	ExceptionEmptyOperand e_empty_op;
 	ExceptionWrongDimensions e_wrong_dim;
-	ExceptionEmptyOperand EXCEPemptyoperand;
-
-	if (w_ != rhs.width())
-		throw(EXCEPwrongdimensions);
-
+	typename list< Vec<T> >::const_iterator it;
+	Mat<T> result(rhs.width());
 	if (rhs.size() == 0)
-		throw(EXCEPemptyoperand);
-
-	Mat<T> resultMAT(w_);
-
-	typename list< Vec<T> >::const_iterator iter = this->begin();
-
-	while (iter != this->end())
 	{
-		resultMAT.push_back(*iter);
-		iter++;
+		throw(e_empty_op);
 	}
-
-	iter = rhs.begin();
-
-	while (iter != rhs.end())
+	if (rhs.width() != this->width())
 	{
-		resultMAT.push_back(*iter);
-		iter++;
+		throw(e_wrong_dim);
 	}
-
-	return resultMAT;
+	it = (*this).begin();
+	while (it != (*this).end())
+	{
+		result.push_back(*it);
+		it++;
+	}
+	it = rhs.begin();
+	while (it != rhs.end())
+	{
+		result.push_back(*it);
+		it++;
+	}
+	return result;
 }
 
 template<class T>
@@ -224,31 +210,20 @@ Mat<T> Mat<T>::get_cols(const Vec<unsigned int>& ind) const
 template<class T>
 Mat<T> Mat<T>::transpose() const
 {
-	unsigned int n = this->height();
-	unsigned int m = this->width();
-
-	Mat<T> resultMAT(this->height());
-
-	Vec<T> BlankVec;
-	Vec<T> LineVec;
-
-	unsigned int row = 0;
-	unsigned int col = 0;
-
-	while (col < m)
+	Mat<T> result((*this).height());
+	unsigned int n, m;
+	Vec<T> vec_line_of_trans, vec_empty;
+	n = (*this).height();
+	m = (*this).width();
+	for (unsigned int j = 0; j < m; j++)
 	{
-		while (row < n)
+		for (unsigned int i = 0; i < n; i++)
 		{
-			LineVec.push_back((*this)[row][col]);
-			row++;
+			vec_line_of_trans.push_back((*this)[i][j]);
 		}
-
-		resultMAT.push_back(LineVec);
-		LineVec = BlankVec;
-
-		col++;
+		result.push_back(vec_line_of_trans);
+		vec_line_of_trans = vec_empty;
 	}
-
 	return result;
 }
 
@@ -261,21 +236,19 @@ Mat<T> operator*(const T & lhs, const Mat<T>& rhs)
 template<class T>
 ostream & operator<<(ostream & ro, const Mat<T>& m)
 {
-	ExceptionEmptyOperand EXCEPemptyoperand;
+	
+	ExceptionEmptyOperand e_empty_op;
 	if (m.size() == 0)
-		throw(EXCEPemptyoperand);
+		throw(e_empty_op);
 
 	ro << "(" << endl;
 
 	unsigned int i = 0;
-	unsigned int j = 0;
-
-	while (i < m.height())
-	{
+	while (i < m.height()) {
 		ro << "(";
 
-		while (j < m.width())
-		{
+		unsigned int j = 0;
+		while (j < m.width()) {
 			if (j == 0)
 				ro << m[i][j];
 			else
@@ -286,15 +259,16 @@ ostream & operator<<(ostream & ro, const Mat<T>& m)
 
 		if (i == m.height() - 1)
 			ro << ")\n";
+	
 		else
 			ro << "),\n";
-
+		
 		i++;
 	}
 
 	ro << ")";
-
 	return ro;
+	
 }
 
 #endif // _MAT_IMPL_H_
