@@ -184,32 +184,6 @@ Vec<T> operator*(const T & lhs, const Vec<T>& rhs)
 
 }
 
-//template<class T>
-//ostream & operator<<(ostream & ro, const Vec<T>& v)
-//{
-//	ExceptionEmptyOperand e_empty_op;
-//	if (v.size() == 0) {
-//		cout << "v1 empty" << endl;
-//		throw (e_empty_op);
-//		cout << "v1 empty" << endl;
-//	}
-//
-//	typename list<T>::const_iterator iter;
-//
-//	ro << "(" << *v.begin();
-//	iter = v.begin();
-//	iter++;
-//
-//	while (iter != v.end()) {
-//		ro << ",\t" << (*iter);
-//		iter++;
-//	}
-//
-//	ro << ")";
-//
-//	return ro;
-//}
-
 template<class T>
 ostream & operator<<(ostream & ro, const Vec<T>& v)
 {
@@ -245,5 +219,38 @@ Vec<T> range(T start, unsigned int size)
 
 	return new_vec;
 }
+
+template<class T>
+class norm_inf_comp {
+public:
+	bool operator()(Vec<T>& lhs, Vec<T>& rhs) const {
+
+		ExceptionEmptyOperand e_empty_op;
+		if (lhs.size() == 0 || rhs.size() == 0)
+			throw (e_empty_op);	// ExceptionEmptyOperand;
+
+		typename list<T>::const_iterator iter = lhs.begin();
+
+		double lhs_norm = 0, rhs_norm = 0;
+
+		while (iter != lhs.end()) {
+			if (lhs_norm > (double)abs(*iter))
+				continue;
+			else
+				lhs_norm = (double)abs(*iter);
+		}
+
+		iter = rhs.begin();
+
+		while (iter != rhs.end()) {
+			if (rhs_norm > (double)abs(*iter))
+				continue;
+			else
+				rhs_norm = (double)abs(*iter);
+		}
+
+		return lhs_norm < rhs_norm;
+	}
+};
 
 #endif // _VEC_IMPL_H_
