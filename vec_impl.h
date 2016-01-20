@@ -4,6 +4,7 @@
 #include <exception>
 #include <iostream>
 #include <cmath>
+#include "complex.h"
 
 //********************************************************************************************
 // Name:           ExceptionWrongDimensions::what()
@@ -143,11 +144,12 @@ T & Vec<T>::operator[](unsigned int ind)
 	if (ind >= this->vals_.size())
 		throw(e_exceed);
 	
-	list<T>::iterator iter = vals_.begin();
+	typename list<T>::iterator iter = vals_.begin();
 
-	while (0 < ind) {
+	unsigned int i = 0;
+	while (i < ind) {
 		iter++;
-		ind--;
+		i++;
 	}
 
 	return (*iter);
@@ -166,11 +168,12 @@ const T & Vec<T>::operator[](unsigned int ind) const
 	if (ind >= this->vals_.size())
 		throw(e_exceed);
 
-	list<T>::const_iterator iter = vals_.begin();
+	typename list<T>::const_iterator iter = vals_.begin();
 
-	while (0 < ind) {
+	unsigned int i = 0;
+	while (i < ind) {
 		iter++;
-		ind--;
+		i++;
 	}
 
 	return (*iter);
@@ -219,18 +222,18 @@ Vec<T> Vec<T>::operator[](const Vec<unsigned int>& ind) const
 	ExceptionIndexExceed e_exceed;
 	ExceptionEmptyOperand e_empty;
 
-	if (ind.size() == 0) // check not empty vector
-		throw (e_empty);
+	//if (ind.size() == 0) // check not empty vector
+	//	throw (e_empty);
 
 	Vec<T> new_vec;
 
-	unsigned int i = ind.size();
-	while (0 < i) { // reach & push back till end of indexes vector rechead
+	unsigned int i = 0;
+	while (i < ind.size()) { // reach & push back till end of indexes vector rechead
 		if (ind[i] >= this->size()) // check given index not exceeded vector size
 			throw (e_exceed);
 
 		new_vec.push_back((*this)[ind[i]]);
-		i--;
+		i++;
 	}
 
 	return new_vec;
@@ -253,7 +256,7 @@ Vec<T> operator*(const T & lhs, const Vec<T>& rhs)
 		throw (e_empty);
 
 	unsigned int i = rhs.size();
-	list<T>::const_iterator iter = rhs.begin();
+	typename list<T>::const_iterator iter = rhs.begin();
 
 	while (0 < i) { // multiply & push back till end of vector
 		new_vec.push_back(lhs * (*iter));
@@ -333,16 +336,16 @@ public:
 		double rhs_norm = 0;
 
 		while (iter != lhs.end()) { // calculate infinity normal for lhs
-			if (lhs_norm < (double)modulu(*iter))
-				lhs_norm = (double)modulu(*iter);
+			if (lhs_norm < (double)abs(*iter))
+				lhs_norm = (double)abs(*iter);
 			iter++;
 		}
 
 		iter = rhs.begin();
 
 		while (iter != rhs.end()) { // calculate infinity normal for rhs
-			if (rhs_norm < (double)modulu(*iter))
-				rhs_norm = (double)modulu(*iter);
+			if (rhs_norm < (double)abs(*iter))
+				rhs_norm = (double)abs(*iter);
 			iter++;
 		}
 
