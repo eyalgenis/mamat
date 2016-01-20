@@ -231,25 +231,24 @@ public:
 
 		typename list<T>::const_iterator iter = lhs.begin();
 
-		double lhs_norm = 0, rhs_norm = 0;
+		double lhs_norm = 0;
+		double rhs_norm = 0;
 
 		while (iter != lhs.end()) {
-			if (lhs_norm > (double)abs(*iter))
-				continue;
-			else
+			if (lhs_norm < (double)abs(*iter))
 				lhs_norm = (double)abs(*iter);
+			iter++;
 		}
 
 		iter = rhs.begin();
 
 		while (iter != rhs.end()) {
-			if (rhs_norm > (double)abs(*iter))
-				continue;
-			else
+			if (rhs_norm < (double)abs(*iter))
 				rhs_norm = (double)abs(*iter);
+			iter++;
 		}
 
-		return lhs_norm < rhs_norm;
+		return (lhs_norm < rhs_norm);
 	}
 };
 
