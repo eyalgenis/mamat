@@ -351,6 +351,11 @@ public:
 
 		return (lhs_norm < rhs_norm);
 	}
+
+	bool operator()(T& lhs, T& rhs) const {
+
+		return lhs < rhs;
+	}
 };
 
 #endif // _VEC_IMPL_H_

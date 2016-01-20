@@ -293,6 +293,7 @@ public:
 		{
 			throw (e_empty_op);// ExceptionEmptyOperand;
 		}
+
 		double inf_norm_lhs = 0, inf_norm_rhs = 0;
 		it = lhs.begin();
 		while (it != lhs.end())
