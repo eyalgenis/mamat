@@ -182,9 +182,12 @@ Mat<T> Mat<T>::operator*(const Mat<T>& rhs) const
 	
 	while (row < n) { // for each lhs row
 
+		col = 0;
+
 		while (col < p) { // for each rhs column
 
 			el = 0;
+			inner = 0;
 
 			while (inner < m) { // for each inner
 				el = el + ((*this)[row][inner] * rhs[inner][col]); // add to element
@@ -228,7 +231,7 @@ Mat<T> Mat<T>::operator,(const Mat<T>& rhs) const
 		throw(EXCEPwrongdimensions);
 	}
 
-	typename list< Vec<T> >::const_iterator iter = this->begin;
+	typename list< Vec<T> >::const_iterator iter = this->begin();
 
 	Mat<T> resultMAT(rhs.width());
 
@@ -309,8 +312,7 @@ Mat<T> Mat<T>::transpose() const
 	unsigned int n = this->height();
 	unsigned int m = w_;
 
-	Vec<T> BlankVec;
-	Vec<T> LineVec;
+	Vec<T> BlankVec, LineVec;
 	Mat<T> resultMAT(this->height());
 
 	unsigned int row = 0;
@@ -318,6 +320,8 @@ Mat<T> Mat<T>::transpose() const
 
 	while (col < m)
 	{
+		row = 0;
+
 		while (row < n)
 		{
 			LineVec.push_back((*this)[row][col]); // insert changed order to line vector
@@ -327,7 +331,7 @@ Mat<T> Mat<T>::transpose() const
 		resultMAT.push_back(LineVec); // insert each line vector to result
 		LineVec = BlankVec; // reset line vector
 
-		cols++;
+		col++;
 	}
 
 	return resultMAT;
