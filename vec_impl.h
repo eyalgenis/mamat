@@ -188,9 +188,9 @@ const T & Vec<T>::operator[](unsigned int ind) const
 template<class T>
 Vec<T> Vec<T>::operator,(const Vec & rhs) const
 {
-	ExceptionEmptyOperand e_empty;
-	if (rhs.size() == 0) // check not empty vector
-		throw (e_empty);
+//	ExceptionEmptyOperand e_empty;
+//	if (rhs.size() == 0) // check not empty vector
+//		throw (e_empty);
 
 	Vec<T> new_vec;
 
