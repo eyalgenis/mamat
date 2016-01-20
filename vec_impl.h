@@ -213,7 +213,7 @@ Vec<T> range(T start, unsigned int size)
 	unsigned int i = 0;
 	while (i < size) {
 		new_vec.push_back(start);
-		start++;
+		start = start+1;
 		i++;
 	}
 
@@ -235,21 +235,22 @@ public:
 		double rhs_norm = 0;
 
 		while (iter != lhs.end()) {
-			if (lhs_norm < (double)abs(*iter))
-				lhs_norm = (double)abs(*iter);
+			if (lhs_norm < (double)modulu(*iter))
+				lhs_norm = (double)modulu(*iter);
 			iter++;
 		}
 
 		iter = rhs.begin();
 
 		while (iter != rhs.end()) {
-			if (rhs_norm < (double)abs(*iter))
-				rhs_norm = (double)abs(*iter);
+			if (rhs_norm < (double)modulu(*iter))
+				rhs_norm = (double)modulu(*iter);
 			iter++;
 		}
 
 		return (lhs_norm < rhs_norm);
 	}
-};
+};
+
 
 #endif // _VEC_IMPL_H_
