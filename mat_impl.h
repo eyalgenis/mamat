@@ -7,13 +7,27 @@
 
 using namespace std;
 
+//********************************************************************************************
+// Function Name:  Mat (constructor) 
+// Description:    Creates a new matrix and initializes its width to w
+// Parameters:
+//		w (unsigned int) - width of vectors in the matrix
+// Return value:   Newly created matrix
+//********************************************************************************************
 template <class T>
-Mat<T>::Mat(unsigned int w) : // constructor for matrix WIDTH INITIALIZATION (=> WIDTH for all vectors)
+Mat<T>::Mat(unsigned int w) :
 	w_(w)
 {}
 
+//********************************************************************************************
+// Function Name:  Mat (constructor) 
+// Description:    Creates a new matrix with one row (vector) and initializes its width to vector's width
+// Parameters:
+//		vec_1d (Vec) - row (vector)
+// Return value:   Newly created matrix
+//********************************************************************************************
 template <class T>
-Mat<T>::Mat(Vec<T> vec_1d) // constructor for ONE ROW (vector), and also: mat_width <= vec_width
+Mat<T>::Mat(Vec<T> vec_1d)
 {
 	ExceptionEmptyOperand EXCEPemptyoperand;
 
@@ -25,6 +39,13 @@ Mat<T>::Mat(Vec<T> vec_1d) // constructor for ONE ROW (vector), and also: mat_wi
 	w_ = vec_1d.size();
 }
 
+//********************************************************************************************
+// Function Name:  Mat (constructor) 
+// Description:    Creates a new 2D matrix with vector of vectors, and initializes its width to first vector's width
+// Parameters:
+//		vec_2d ((Vec< Vec >) - vector of vectors
+// Return value:   Newly created matrix
+//********************************************************************************************
 template <class T>
 Mat<T>::Mat(Vec< Vec<T> > vec_2d) // constructor for 2D (vector of vectors), and also: mat_width <= 2D[0].size() = first vector's size
 {
@@ -44,18 +65,37 @@ Mat<T>::Mat(Vec< Vec<T> > vec_2d) // constructor for 2D (vector of vectors), and
 	}
 }
 
+//********************************************************************************************
+// Function Name:  width
+// Description:    returns the matrix's (vectors') width
+// Parameters:     None
+// Return value:   w_ (unsigned int) - matrix's width
+//********************************************************************************************
 template<class T>
 unsigned int Mat<T>::width() const
 {
 	return w_;
 }
 
+//********************************************************************************************
+// Function Name:  height
+// Description:    returns the matrix's height (width of vertical vector of horizontal vectors)
+// Parameters:     None
+// Return value:   w_ (unsigned int) - vertical vector's width
+//********************************************************************************************
 template<class T>
 unsigned int Mat<T>::height() const
 {
-	return this->vals_.size(); // size of this<->vertical vector (of hotizontal vectors)
+	return this->vals_.size();
 }
 
+//********************************************************************************************
+// Function Name:  operator+
+// Description:    operator+ overload for matrix - adds current matrix to another (rhs)
+// Parameters:     
+//		rhs (Mat&) - matrix for addition
+// Return value:   resultMAT - matrices summary result
+//********************************************************************************************
 template<class T>
 Mat<T> Mat<T>::operator+(const Mat& rhs) const
 {
@@ -76,7 +116,7 @@ Mat<T> Mat<T>::operator+(const Mat& rhs) const
 
 	while(i < rhs.height())
 	{
-		resultMAT.push_back(rhs[i] + (*iter));
+		resultMAT.push_back(rhs[i] + (*iter)); // insert summary for every row
 
 		i++;
 		iter++;
@@ -85,8 +125,15 @@ Mat<T> Mat<T>::operator+(const Mat& rhs) const
 	return resultMAT;
 }
 
+//********************************************************************************************
+// Function Name:  operator*
+// Description:    operator* overload for scalar - multiply current matrix with a scalar (rhs)
+// Parameters:     
+//		rhs (T&) - scalar for multiplication
+// Return value:   resultMAT - multiplication result
+//********************************************************************************************
 template<class T>
-Mat<T> Mat<T>::operator*(const T & rhs) const
+Mat<T> Mat<T>::operator*(const T& rhs) const
 {
 	Mat<T> resultMAT(w_);
 
@@ -94,85 +141,121 @@ Mat<T> Mat<T>::operator*(const T & rhs) const
 
 	while (iter != this->end())
 	{
-		resultMAT.push_back((*iter) * rhs);
+		resultMAT.push_back((*iter) * rhs); // multiply every vector with scalar and insert
 		iter++;
 	}
 
 	return resultMAT;
 }
 
+//********************************************************************************************
+// Function Name:  operator*
+// Description:    operator* overload for matrix - multiply current matrix with another (rhs)
+// Parameters:     
+//		rhs (Mat&) - matrix for multiplication
+// Return value:   resultMAT - matrices multiplication result
+//********************************************************************************************
 template<class T>
 Mat<T> Mat<T>::operator*(const Mat<T>& rhs) const
 {
+	ExceptionWrongDimensions EXCEPwrongdimensions;
+	ExceptionEmptyOperand EXCEPemptyoperand;
+
 	unsigned int n = this->height();
-	unsigned int m = this->width();
+	unsigned int m = w_;
 	unsigned int p = rhs.width();
-	Mat<T> new_mat(p);
-	Vec<T> vec_line, vec_temp;
-	T elem;
-	ExceptionWrongDimensions e_wrong_dim;
-	ExceptionEmptyOperand e_empty_op;
 
-	if (this->width() != rhs.height())
-		throw(e_wrong_dim);
+	if ((n == 0) || (m == 0) || (p == 0))
+		throw(EXCEPemptyoperand);
 
-	if ((rhs.width() == 0) || (rhs.height() == 0) || (this->width() == 0) || (this->height() == 0))
-		throw(e_empty_op);
+	if (m != rhs.height())
+		throw(EXCEPwrongdimensions);
 
-	unsigned int i = 0;
-	while (i < n) {
+	T el;
+	Vec<T> BlankVec;
+	Vec<T> LineVec;
+	Mat<T> resultMAT(p);
 
-		unsigned int j = 0;
-		while (j < p) {
-			elem = 0;
-			unsigned int k = 0;
-			while (k < m) {
-				elem = elem + ((*this)[i][k] * rhs[k][j]);
-				k++;
+	unsigned int row = 0;
+	unsigned int col = 0;
+	unsigned int inner = 0;
+	
+	while (row < n) { // for each lhs row
+
+		while (col < p) { // for each rhs column
+
+			el = 0;
+
+			while (inner < m) { // for each inner
+				el = el + ((*this)[row][inner] * rhs[inner][col]); // add to element
+				inner++;
 			}
-			vec_line.push_back(elem);
 
-			j++;
+			LineVec.push_back(el); // insert element result to line vector
+
+			col++;
 		}
-		new_mat.push_back(vec_line);
-		vec_line = vec_temp;
 
-		i++;
+		resultMAT.push_back(LineVec); // insert line vector to result matrix
+		LineVec = BlankVec; // reset line vector
+
+		row++;
 	}
 
-	return new_mat;
+	return resultMAT;
 }
 
+//********************************************************************************************
+// Function Name: operator,                                
+// Description:   concatenates the input matrix's (rhs) rows under the current matrix
+// Parameters:   
+//		rhs (Mat&) - matrix for conctenation
+// Return value:  resultMAT - matrices conctenation result
+//********************************************************************************************
 template<class T>
 Mat<T> Mat<T>::operator,(const Mat<T>& rhs) const
 {
-	ExceptionEmptyOperand e_empty_op;
-	ExceptionWrongDimensions e_wrong_dim;
-	typename list< Vec<T> >::const_iterator it;
-	Mat<T> result(rhs.width());
+	ExceptionWrongDimensions EXCEPwrongdimensions;
+	ExceptionEmptyOperand EXCEPemptyoperand;
+
 	if (rhs.size() == 0)
 	{
-		throw(e_empty_op);
+		throw(EXCEPemptyoperand);
 	}
-	if (rhs.width() != this->width())
+
+	if (w_ != rhs.width())
 	{
-		throw(e_wrong_dim);
+		throw(EXCEPwrongdimensions);
 	}
-	it = (*this).begin();
-	while (it != (*this).end())
+
+	typename list< Vec<T> >::const_iterator iter = this->begin;
+
+	Mat<T> resultMAT(rhs.width());
+
+	while (iter != this->end())
 	{
-		result.push_back(*it);
-		it++;
+		resultMAT.push_back(*iter); // insert current matrix to result
+		iter++;
 	}
-	it = rhs.begin();
-	while (it != rhs.end())
+
+	iter = rhs.begin();
+
+	while (iter != rhs.end())
 	{
-		result.push_back(*it);
-		it++;
+		resultMAT.push_back(*iter); // insert rhs matrix to result
+		iter++;
 	}
-	return result;
+
+	return resultMAT;
 }
 
+//********************************************************************************************
+// Function Name: get_rows                        
+// Description:   returns the rows by vector of indices as a matrix
+// Parameters:   
+//		ind (Vec<unsigned int>&) - vector of row's indices for result matrix
+// Return value:  resultMAT - matrix with desirable rows
+//********************************************************************************************
 template<class T>
 Mat<T> Mat<T>::get_rows(const Vec<unsigned int>& ind) const
 {
@@ -195,59 +278,101 @@ Mat<T> Mat<T>::get_rows(const Vec<unsigned int>& ind) const
 	return resultMAT;
 }
 
+//********************************************************************************************
+// Function Name: get_cols                      
+// Description:   returns the columns by vector of indices as a matrix
+// Parameters:   
+//		ind (Vec<unsigned int>&) - vector of column's indices for result matrix
+// Return value:  resultMAT - matrix with desirable columns
+//********************************************************************************************
 template<class T>
 Mat<T> Mat<T>::get_cols(const Vec<unsigned int>& ind) const
 {
 	Mat<T> TranMAT(this->height());
-	TranMAT = (*this).transpose().get_rows(ind);
+	TranMAT = this->transpose().get_rows(ind); // use transpose of get_rows to achieve columns
 
 	Mat<T> resultMAT(ind.size());
-	resultMAT = TranMAT.transpose();
+	resultMAT = TranMAT.transpose(); // transpose back result matrix
 
 	return resultMAT;
 }
 
+//********************************************************************************************
+// Function Name: transpose                          
+// Description:   transposes current matrix
+// Parameters:    None
+// Return value:  resultMAT - transposed matrix
+//********************************************************************************************
 template<class T>
 Mat<T> Mat<T>::transpose() const
 {
-	Mat<T> result((*this).height());
-	unsigned int n, m;
-	Vec<T> vec_line_of_trans, vec_empty;
-	n = (*this).height();
-	m = (*this).width();
-	for (unsigned int j = 0; j < m; j++)
+	unsigned int n = this->height();
+	unsigned int m = w_;
+
+	Vec<T> BlankVec;
+	Vec<T> LineVec;
+	Mat<T> resultMAT(this->height());
+
+	unsigned int row = 0;
+	unsigned int col = 0;
+
+	while (col < m)
 	{
-		for (unsigned int i = 0; i < n; i++)
+		while (row < n)
 		{
-			vec_line_of_trans.push_back((*this)[i][j]);
+			LineVec.push_back((*this)[row][col]); // insert changed order to line vector
+			row++;
 		}
-		result.push_back(vec_line_of_trans);
-		vec_line_of_trans = vec_empty;
+
+		resultMAT.push_back(LineVec); // insert each line vector to result
+		LineVec = BlankVec; // reset line vector
+
+		cols++;
 	}
-	return result;
+
+	return resultMAT;
 }
 
+//********************************************************************************************
+// Function Name:  operator*
+// Description:    operator* overload for scalar - multiply it with a matrix (rhs)
+// Parameters:   
+//		lhs (T&) - scalar for multiplication(T&) - scalar for multiplication
+//		rhs (MAT&) - matrix for multiplication
+// Return value:   resultMAT - multiplication result
+//********************************************************************************************
 template<class T>
-Mat<T> operator*(const T & lhs, const Mat<T>& rhs)
+Mat<T> operator*(const T& lhs, const Mat<T>& rhs)
 {
 	return rhs*lhs;
 }
 
+//********************************************************************************************
+// Function Name:  operator<<     
+// Description:    operator<< overload for printing to standart output a matrix row-by-row
+// Description:    outputs the vector to ostream in this pattern by overloading the << operator
+// Parameters:     
+//		ro (ostream&) - output stream
+//		m (Mat&) - matrix for printing
+// Return value:   ro - updated output stream
+//********************************************************************************************
 template<class T>
-ostream & operator<<(ostream & ro, const Mat<T>& m)
+ostream& operator<<(ostream& ro, const Mat<T>& m)
 {
-	
-	ExceptionEmptyOperand e_empty_op;
+	ExceptionEmptyOperand EXCEPemptyoperand;
+
 	if (m.size() == 0)
-		throw(e_empty_op);
+		throw(EXCEPemptyoperand);
 
 	ro << "(" << endl;
 
 	unsigned int i = 0;
+
 	while (i < m.height()) {
 		ro << "(";
 
 		unsigned int j = 0;
+
 		while (j < m.width()) {
 			if (j == 0)
 				ro << m[i][j];
@@ -268,7 +393,6 @@ ostream & operator<<(ostream & ro, const Mat<T>& m)
 
 	ro << ")";
 	return ro;
-	
 }
 
 #endif // _MAT_IMPL_H_
